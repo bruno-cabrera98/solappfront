@@ -4,62 +4,66 @@ import {useDispatch, useSelector} from "react-redux";
 import {initializeAction, pauseAction, setAudioAction, resumeAction, updateAction} from "../reducers/playerReducer";
 import styled from "styled-components";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Slider from "./stateless/Slider";
+import PlayerTitle from "./stateless/PlayerTitle";
+import PlayButton from "./stateless/PlayButton";
 
-const PlayIcon = styled.button`
-  font-family: "delsol" !important;
-  font-style: normal !important;
-  font-weight: normal !important;
-  font-variant: normal !important;
-  text-transform: none !important;
-  speak: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "k";
-  font-size: 2.25em;
-  line-height: 55px;
-  color: rgba(255, 255, 255, 0.91);
-  width: 55px;
-  height: 55px;
-  text-align: center;
-  display: block;
-  border-radius: 50%;
-  background-image: linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
-  -webkit-transition: all 0.6s ease-in-out;
-  -moz-transition: all 0.6s ease-in-out;
-  -ms-transition: all 0.6s ease-in-out;
-  -o-transition: all 0.6s ease-in-out;
-  transition: all 0.6s ease-in-out;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.56);
-  border: none;
-  cursor: pointer;
-`
-
-const PlayerWraper = styled.div`
+const PlayerWrapper = styled.div`
   display: flex;
   position: fixed;
   bottom: 0;
   left: 0;
-  height: 60px;
   -webkit-transition: all 0.3s ease-in-out;
   box-shadow: 0 10px 20px 10px rgb(8, 1, 15);
   transition: all 0.3s ease-in-out;
   background-color: #08010f;
+  border-top: 1px solid #28044f;
+  box-sizing: border-box;
+  flex-direction: column;
+  width: 100%;
+  z-index: 1000;
+`
+
+const InnerPlayerWrapper = styled.div`
+  display: flex;
+  padding: 5px 10px;
   width: 100%;
   align-items: center;
-  border-top: 1px solid #28044f;
+  box-sizing: border-box;
 `
+
+const TimerWrapper = styled.div`
+  font-family: sans-serif;
+  display: flex;
+  color: white;
+  background-image: linear-gradient(67deg,#e8154a 0%,#e87630 45%,#e8d615 100%);
+  padding: 5px;
+  border-radius: 10px;
+  margin-left: 5px;
+  font-weight: 500;
+`
+
+const SliderWrapper = styled.div`
+  margin-left: 10px;
+  width: auto;
+  flex-grow: 1;
+`
+
+const Timer = ({time, duration}) => {
+    const timeMinutes = String(Math.floor(time / 60)).padStart(2, '0')
+    const timeSeconds = String(Math.floor(time % 60)).padStart(2, '0')
+    const durationMinutes = String(Math.floor(duration / 60)).padStart(2, '0')
+    const durationSeconds = String(Math.floor(duration % 60)).padStart(2, '0')
+
+    return <TimerWrapper>
+        {timeMinutes}:{timeSeconds} / {durationMinutes}:{durationSeconds}
+    </TimerWrapper>
+}
 
 const Player = () => {
     const player = useSelector(state => state.player)
     const audioRef = useRef()
     const dispatch = useDispatch()
-    useEffect(() => {
-        const timer = setTimeout(
-            () => dispatch(updateAction(audioRef.current.currentTime)),
-            1000
-        )
-        return () => clearTimeout(timer);
-    });
 
     useEffect(() => {
         dispatch(initializeAction())
@@ -89,19 +93,38 @@ const Player = () => {
         }
     }
 
-    return player && <PlayerWraper>
-        <PlayIcon onClick={handlePlay}>
-            {
-                player.playing ?
-                    (<FontAwesomeIcon icon="fa-solid fa-pause" size="xs"/>) :
-                    (<FontAwesomeIcon icon="fa-solid fa-play" size="xs" style={{marginLeft: '5px'}}/>)
-            }
-        </PlayIcon>
+    const onPlaying = (event) => {
+        dispatch(updateAction(event.target.currentTime))
+    }
 
-        <audio ref={audioRef}>
-            <source src={player.playingUrl}/>
-        </audio>
-    </PlayerWraper>
+    const onChangeTime = (event) => {
+        audioRef.current.currentTime = event.target.value
+        dispatch(updateAction(event.target.value))
+    }
+
+    return player && <PlayerWrapper>
+        <PlayerTitle title={player.audioTitle}/>
+        <InnerPlayerWrapper>
+            <PlayButton handlePlay={handlePlay} playing={player.playing}/>
+            <audio ref={audioRef} onTimeUpdate={onPlaying}>
+                <source src={player.playingUrl}/>
+            </audio>
+            {player && audioRef.current?
+                <><SliderWrapper>
+                    <Slider
+                        max={(audioRef.current && audioRef.current.duration) || 0}
+                        value={player.second}
+                        onChange={onChangeTime}
+                    />
+                </SliderWrapper>
+
+                    <Timer time={player.second} duration={audioRef.current.duration}/>
+                </>
+                : false
+            }
+
+        </InnerPlayerWrapper>
+    </PlayerWrapper>
 }
 
 

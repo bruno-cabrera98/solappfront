@@ -14,4 +14,12 @@ const getAudio = async (id) => {
     })
 }
 
-export default { getDarwin, getAudio }
+const getProgramas = async () => {
+    return await axios.get(url+'programas')
+}
+
+const getProgram = async (id) => {
+    return await axios.get(url+`programas/${id}`)
+}
+
+export default { getDarwin, getAudio, getProgramas, getProgram }

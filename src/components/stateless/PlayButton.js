@@ -1,30 +1,7 @@
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
-const Button = styled.button`
-  border: none;
-  border-radius: 3px;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 40px;
-  font-family: "Raleway", sans-serif;
-  color: rgba(255,255,255,0.91);
-  text-transform: uppercase;
-  display: inline-block;
-  height: 40px;
-  margin: 10px 0px 0px 10px;
-  padding: 0px 10px 0px 10px;
-  background: #e86215;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  :hover {
-    background-image: -moz-linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
-    background-image: -webkit-linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
-    background-image: -ms-linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
-    box-shadow: 0px 0px 15px rgba(0,0,0,0.71);
-  }
-`
-
-const RoundButton = styled.button`
+const PlayIcon = styled.button`
   font-family: "delsol" !important;
   font-style: normal !important;
   font-weight: normal !important;
@@ -33,6 +10,7 @@ const RoundButton = styled.button`
   speak: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  content: "k";
   font-size: 2.25em;
   line-height: 55px;
   color: rgba(255, 255, 255, 0.91);
@@ -52,4 +30,13 @@ const RoundButton = styled.button`
   cursor: pointer;
 `
 
-export {RoundButton, Button}
+const PlayButton = ({handlePlay, playing}) =>
+    <PlayIcon onClick={handlePlay}>
+        {
+            playing ?
+                (<FontAwesomeIcon icon="fa-solid fa-pause" size="xs"/>) :
+                (<FontAwesomeIcon icon="fa-solid fa-play" size="xs" style={{marginLeft: '5px'}}/>)
+        }
+    </PlayIcon>
+
+export default PlayButton

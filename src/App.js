@@ -1,51 +1,45 @@
-import {useEffect, useRef, useState} from "react";
-import service from './service/api'
 import Player from "./components/Player";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {faPlay, faPause} from "@fortawesome/free-solid-svg-icons";
-import AudioCard from "./components/AudioCard";
-import db from './db'
-import {useDispatch, useSelector} from "react-redux";
-import {initializeAudioListAction} from "./reducers/audioListReducer";
+import {createGlobalStyle} from "styled-components";
+import {Route, Routes} from "react-router";
+import DarwinList from "./pages/DarwinList";
+import DownloadedAudios from "./pages/DownloadedAudios";
+import Navbar from "./components/Navbar";
+import {useEffect} from "react";
+import api from "./service/api"
+import {useDispatch} from "react-redux";
+import {initAction} from "./reducers/programsReducer";
+import ProgramList from "./pages/ProgramList";
+import ProgramPage from "./pages/ProgramPage";
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background: linear-gradient(to bottom, #0f031c 0%, #03031c 50%, #03031c 100%);
+    margin-top: 70px;
+  }
+`
 
 library.add(faPlay, faPause)
 
 function App() {
-    const programs = useSelector(state => state.audioList)
-    const [page, setPage] = useState(1)
-
-    const handlePage = async (event) => {
-        event.preventDefault()
-        setPage(event.target.value)
-        console.log(page)
-    }
-
     const dispatch = useDispatch()
-
     useEffect(() => {
-        service.getDarwin(page).then(
-            res => {
-                db.audios.orderBy('id').keys()
-                    .then(keys => {
-                        console.log(keys)
-                        dispatch(
-                            initializeAudioListAction(
-                                res.data.records.map(record =>
-                                   ({...record, downloaded:keys.includes(record.id)})
-                                )
-                            )
-                        )
-                    })
-            }
+        api.getProgramas().then(
+            res => dispatch(initAction(res.data.programas))
         )
-    }, [page])
+    }, [])
 
     return (
         <div className="App">
-            {programs && programs.map(program => <AudioCard key={program.id} item={program} /> )}
-
-            <input type='number' onChange={handlePage} value={page}/>
-            <footer style={{height: '100px'}}></footer>
+            <GlobalStyle/>
+            <Navbar/>
+            <Routes>
+                <Route element={<DarwinList/>} path="/"/>
+                <Route element={<ProgramList/>} path="/programs"/>
+                <Route element={<ProgramPage/>} path="/programs/:id"/>
+                <Route element={<DownloadedAudios/>} path="downloads"/>
+            </Routes>
             <Player/>
         </div>
     );

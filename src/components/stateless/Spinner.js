@@ -23,6 +23,6 @@ const StyledSpinner = styled.span`
   line-height: 0;
 `
 
-const Spinner = () => <StyledSpinner><FontAwesomeIcon icon="fa-solid fa-spinner" size="md"/></StyledSpinner>
+const Spinner = () => <StyledSpinner><FontAwesomeIcon icon="fa-solid fa-spinner"/></StyledSpinner>
 
 export default Spinner

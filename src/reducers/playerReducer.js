@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import db from '../db'
 
 const url = 'http://localhost:3001/audio/'
-const cdnUrl = 'http://cdn.dl.uy/solmp3/'
+const cdnUrl = 'https://cdn.dl.uy/solmp3/'
 
 const initialState = {
     playing: false,
@@ -15,8 +15,9 @@ const playerSlice = createSlice({
     reducers: {
         setAudio(state, action) {
             state.playing = false
-            state.playingUrl = action.payload
+            state.playingUrl = action.payload.url
             state.second = 0
+            state.audioTitle = action.payload.title
             return state
         },
         resume(state) {
@@ -42,14 +43,13 @@ export const { setAudio, stop, resume, pause, update, initialize } = playerSlice
 
 export default playerSlice.reducer
 
-export const setAudioAction = (id) => {
+export const setAudioAction = (id, title) => {
     return async (dispatch, getState) => {
         let url = `${cdnUrl}${id}.mp3`
         const audioBlob = await db.audios.get(id)
-        console.log(audioBlob)
         if (audioBlob)
             url = URL.createObjectURL(audioBlob.blob)
-        dispatch(setAudio(url))
+        dispatch(setAudio({url, title}))
         let audioPlaying = JSON.parse(localStorage.getItem('audioPlaying'))
         audioPlaying = {
             ...audioPlaying,
