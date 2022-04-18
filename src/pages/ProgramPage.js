@@ -1,6 +1,7 @@
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import api from '../service/api'
+import ProgramSection from "../components/stateless/ProgramSection";
 
 const ProgramPage = () => {
     const {id} = useParams()
@@ -19,7 +20,8 @@ const ProgramPage = () => {
     }, [id])
     return program && <div>
         {program.nombre}
-        {sections.map(sec => sec.nombre)}
+
+        {sections.map(sec => <ProgramSection key={sec.id} section={sec}/>)}
     </div>
 
 }
