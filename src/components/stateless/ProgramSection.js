@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {Link} from "react-router-dom";
 
 const SectionTitle = styled.div`
   position: absolute;
@@ -38,21 +39,22 @@ const SectionWrapper = styled.div`
 `
 
 const ProgramSection = ({section}) => {
-  return section && (
-    <SectionWrapper>
-      <SectionTitle content={section.contenido}>
-        <AudioCardTitle>
-          Hola
-        </AudioCardTitle>
-      </SectionTitle>
-      {
-        <SectionProgramCard content={section.contenido}>
-          <p>{ section.contenido.titulo}</p>
-        </SectionProgramCard>
-      }
-
-    </SectionWrapper>
-  )
+    return section && (
+        <Link to={section.id} style={{ textDecoration: 'none' }}>
+            <SectionWrapper>
+                <SectionTitle content={section.contenido}>
+                    <AudioCardTitle>
+                        {section.nombre}
+                    </AudioCardTitle>
+                </SectionTitle>
+                {
+                    <SectionProgramCard content={section.contenido}>
+                        <p>{ section.contenido.titulo}</p>
+                    </SectionProgramCard>
+                }
+            </SectionWrapper>
+        </Link>
+    )
 }
 
 export default ProgramSection

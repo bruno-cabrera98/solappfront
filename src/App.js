@@ -1,24 +1,30 @@
 import Player from "./components/Player";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {faPlay, faPause} from "@fortawesome/free-solid-svg-icons";
-import {createGlobalStyle} from "styled-components";
+import styled, {createGlobalStyle} from "styled-components";
 import {Route, Routes} from "react-router";
 import DarwinList from "./pages/DarwinList";
 import DownloadedAudios from "./pages/DownloadedAudios";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/stateless/Navbar";
 import {useEffect} from "react";
 import api from "./service/api"
 import {useDispatch} from "react-redux";
 import {initAction} from "./reducers/programsReducer";
 import ProgramList from "./pages/ProgramList";
 import ProgramPage from "./pages/ProgramPage";
+import SectionAudios from "./pages/SectionAudios";
+import {OtherMenu, SideMenu} from "./components/SideMenu";
+import {ContentWrapper, PageContainer} from "./components/stateless/ContentWrapper";
 
 const GlobalStyle = createGlobalStyle`
   body {
     background: linear-gradient(to bottom, #0f031c 0%, #03031c 50%, #03031c 100%);
-    margin-top: 70px;
+    margin:auto;
+    position: relative;
+    max-width: 1600px;
   }
 `
+
 
 library.add(faPlay, faPause)
 
@@ -34,12 +40,18 @@ function App() {
         <div className="App">
             <GlobalStyle/>
             <Navbar/>
-            <Routes>
-                <Route element={<DarwinList/>} path="/"/>
-                <Route element={<ProgramList/>} path="/programs"/>
-                <Route element={<ProgramPage/>} path="/programs/:id"/>
-                <Route element={<DownloadedAudios/>} path="downloads"/>
-            </Routes>
+            <PageContainer>
+                <SideMenu/>
+                <ContentWrapper>
+                    <Routes>
+                        <Route element={<DarwinList/>} path="/"/>
+                        <Route element={<ProgramList/>} path="/programs"/>
+                        <Route element={<ProgramPage/>} path="/programs/:id"/>
+                        <Route element={<SectionAudios/>} path="/programs/:id/:section"/>
+                        <Route element={<DownloadedAudios/>} path="downloads"/>
+                    </Routes>
+                </ContentWrapper>
+            </PageContainer>
             <Player/>
         </div>
     );

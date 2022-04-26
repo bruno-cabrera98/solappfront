@@ -1,9 +1,9 @@
 import axios from "axios";
-const url = process.env.REACT_APP_API_URL || ''
+const url = process.env.REACT_APP_API_URL || 'https://del-sol-app.herokuapp.com/'
 
-const getDarwin = async (page) => {
+const getAudioSection = async (program, section, page) => {
     console.log(url)
-    return await axios.get(url + `programas/ntn/darwincolumna/contenido/${page}`, {
+    return await axios.get(url + `programas/${program}/${section}/contenido/${page}`, {
         mode: 'no-cors'
     })
 }
@@ -22,4 +22,4 @@ const getProgram = async (id) => {
     return await axios.get(url+`programas/${id}`)
 }
 
-export default { getDarwin, getAudio, getProgramas, getProgram }
+export default { getAudioSection, getAudio, getProgramas, getProgram }

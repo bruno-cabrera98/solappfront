@@ -48,8 +48,15 @@ const AudioCardTitle = styled.h3`
 const AudioSubtitle = styled.h4`
   font-family: sans-serif;
   font-size: 14px;
-
   text-shadow: 1px 1px 2px #070c13;
+`
+
+const AudioCardTitleWrapper = styled.div`
+  margin-left: 80px;
+`
+
+const AudioButtonContainer = styled.div`
+  position: absolute;
 `
 
 const AudioCard = ({item}) => {
@@ -74,18 +81,25 @@ const AudioCard = ({item}) => {
         }
     }
 
-    return item && <AudioCardWrapper>
-        <AudioCardTitle>{item.titulo}</AudioCardTitle>
-        <AudioSubtitle>{item.fechaEmision_full}</AudioSubtitle>
-        <RoundButton onClick={handlePlay}>
-            <FontAwesomeIcon icon="fa-solid fa-plus" />
-        </RoundButton>
-        <Button onClick={handleDownload}>Download</Button>
-        {item.downloading ? <Spinner/> : false}
-        {item.downloaded ? <p>Si</p> : <p>No</p>}
+    return item &&
+        <AudioCardWrapper>
+            <AudioButtonContainer>
+                <RoundButton onClick={handlePlay}>
+                    <FontAwesomeIcon icon="fa-solid fa-plus" />
+                </RoundButton>
+            </AudioButtonContainer>
 
-        <BackgroundImage src={item.media.img_894x503}/>
-    </AudioCardWrapper>
+            <AudioCardTitleWrapper>
+                <AudioCardTitle>{item.titulo}</AudioCardTitle>
+                <AudioSubtitle>{item.fechaEmision_full}</AudioSubtitle>
+            </AudioCardTitleWrapper>
+
+            <Button onClick={handleDownload}>Download</Button>
+            {item.downloading ? <Spinner/> : false}
+            {item.downloaded ? <p>Si</p> : <p>No</p>}
+
+            <BackgroundImage src={item.media.img_894x503}/>
+        </AudioCardWrapper>
 }
 
 export default AudioCard

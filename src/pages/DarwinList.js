@@ -15,7 +15,7 @@ const DarwinList = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        service.getDarwin(page).then(
+        service.getAudioSection('ntn', 'darwincolumna', page).then(
             res => {
                 db.audios.orderBy('id').keys()
                     .then(keys => {
