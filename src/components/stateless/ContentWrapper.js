@@ -5,6 +5,8 @@ const ContentWrapper = styled.div`
   width: 100%;
   margin-top: 60px;
   padding: 10px;
+  box-sizing: border-box;
+  min-width: 0;
 `
 
 const PageContainer = styled.div`

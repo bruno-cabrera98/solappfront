@@ -8,6 +8,7 @@ import {setAudioDownloadedAction, setAudioDownloadingAction} from "../reducers/a
 import service from "../service/api";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {faDownload} from "@fortawesome/free-solid-svg-icons";
+import {device} from "../parameters/sizing"
 
 import styled, {keyframes, css} from "styled-components";
 
@@ -16,18 +17,22 @@ library.add(faDownload)
 const DetailsContainer = styled.div`
   display: flex;
   align-items: center;
+  min-width: 0;
+  padding-right: 10px;
 `
 
 const ItemWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   height: 60px;
+  min-width: 0;
 `
 
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 5px;
+  min-width: 0;
 `
 
 const skeletonAnimation = keyframes`
@@ -42,27 +47,28 @@ const skeletonAnimation = keyframes`
 const ItemText = styled.h1`
   margin: 0 0;
   color: white;
+  font-size: 12px;
   font-family: sans-serif;
-  font-size: 14px;
   position: relative;
-
+  min-width: 0;
   ${({skeleton}) => skeleton ? css`
     visibility: hidden;
     height: 16px;
+
     :after {
-      top:0px;
+      top: 0px;
       visibility: visible;
       content: '';
       height: 12px;
       margin: 2px 0;
       width: 600px;
-      background: rgba(255,255,255,.4);
+      background: rgba(255, 255, 255, .4);
       display: block;
       position: absolute;
       z-index: 1;
       border-radius: 2px;
       animation-duration: 1s;
-      animation-name:  ${skeletonAnimation};
+      animation-name: ${skeletonAnimation};
       animation-direction: alternate;
       animation-iteration-count: infinite;
       animation-timing-function: linear;
@@ -75,14 +81,24 @@ const ItemTitle = styled(ItemText)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  width: 900px;
+
+  font-size: 12px;
+  @media (${device.tablet}) {
+    font-size: 14px;
+  }
 `
 
 const ItemSubtitle = styled(ItemText)`
   font-family: sans-serif;
   color: white;
-  font-size: 10px;
   margin: 0 0;
+
+  font-size: 8px;
+
+  @media (${device.table}) {
+    font-size: 10px;
+  }
+  
   ${({skeleton}) => skeleton ? css`
     visibility: hidden;
     height: 16px;
@@ -131,6 +147,12 @@ const ButtonGroup = styled.div`
   ${Button} {
     margin: 0;
     border-radius: 0;
+    font-size: 10px;
+    height: 30px;
+    line-height: 30px;
+    @media (${device.tablet}) {
+      font-size: 14px;
+    }
   }
   border-radius: 5px;
   overflow: hidden;
