@@ -57,9 +57,12 @@ const AudioListWrapper = styled.div`
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  ${({expanded}) => !expanded ? css `
+  transition: height .2s ease-in-out;
+  ${({expanded, size}) => !expanded ? css `
     height: 100px;
-  ` : css``}
+  ` : css`
+    height: ${20 + size*60}px;
+  `}
 `
 
 const AudioListPagerWrapper = styled.div`
@@ -87,35 +90,25 @@ const AudioList = (
         page,
         nextPage,
         previousPage,
-        onExpand,
+        switchExpander,
+        expanded,
     }) => {
 
-    const [expanded, setExpanded] = useState(false)
-
-    const switchExpander = () => {
-        setExpanded(!expanded)
+    const getListSize = () => {
+        if (!expanded)
+            return 1
+        return (items && items.length) || size
     }
 
-    const getListSize = () => expanded ? size : 1
-
-    useEffect(() => {
-        if (expanded) {
-            onExpand()
-        }
-    }, [expanded])
-
-
     const emptyList = () => {
-        console.log(items)
         if (!items || items.length === 0) {
-            console.log(items)
             return Array.from(Array(getListSize()).keys()).map(
                 item => <AudioListItem key={item} skeleton={true}/>
             )
         } else return false
     }
 
-    return <AudioListWrapper expanded={expanded}>
+    return <AudioListWrapper expanded={expanded} size={getListSize()}>
         <AudioListMenu title={title} expanded={expanded} switchExpander={switchExpander}/>
         {
             emptyList() || items.slice(0, getListSize()).map(

@@ -5,11 +5,17 @@ import AudioList from "../components/AudioList";
 import {setSectionAction} from "../reducers/programsReducer";
 import {useDispatch, useSelector} from "react-redux";
 import ProgramSection from "../components/ProgramSection";
+import styled from "styled-components";
+
+const Title = styled.h1`
+  font-family: sans-serif;
+  color: white;
+`
 
 const ProgramPage = () => {
     const {id} = useParams()
     const [program, setProgram] = useState({})
-    //const [sections, setSections] = useState([])
+
     const sections = useSelector(state => {
         const programs = state.programs && state.programs.find(program => program.id === id)
         return (programs && programs.sections) || []
@@ -22,16 +28,13 @@ const ProgramPage = () => {
             api.getProgram(id)
                 .then(res => {
                     setProgram(res.data.record)
-
                     dispatch(setSectionAction(id, res.data.secciones))
-                    // setSections(res.data.secciones)
                 })
         }
-
     }, [id])
 
     return program && <div>
-        {program.nombre}
+        <Title>{program.nombre}</Title>
         {sections.map(sec => <ProgramSection
             key={sec.id}
             programId={id}

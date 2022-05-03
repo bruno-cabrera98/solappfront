@@ -13,7 +13,6 @@ const programsSlice = createSlice({
             const program = state.find(program => program.id === id)
             if (program) {
                 program.sections = sections.map(sec => {
-                    console.log(sec)
                     sec.contenido = [sec.contenido]
                     return sec
                 })

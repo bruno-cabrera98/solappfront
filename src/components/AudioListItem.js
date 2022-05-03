@@ -24,7 +24,7 @@ const DetailsContainer = styled.div`
 const ItemWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 60px;
+  min-height: 60px;
   min-width: 0;
 `
 

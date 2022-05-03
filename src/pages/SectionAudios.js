@@ -15,8 +15,6 @@ const SectionAudios = () => {
     const [programs, setPrograms] = useState([])
     const [page, setPage] = useState(1)
 
-    const dispatch = useDispatch()
-
     useEffect(() => {
         setPrograms(false)
         service.getAudioSection(id, section, page).then(

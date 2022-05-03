@@ -2,7 +2,6 @@ import axios from "axios";
 const url = process.env.REACT_APP_API_URL || 'https://del-sol-app.herokuapp.com/'
 
 const getAudioSection = async (program, section, page) => {
-    console.log(url)
     return await axios.get(url + `programas/${program}/${section}/contenido/${page}`, {
         mode: 'no-cors'
     })
