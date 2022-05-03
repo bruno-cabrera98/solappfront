@@ -106,7 +106,9 @@ const AudioList = (
 
 
     const emptyList = () => {
-        if (!items || items.size === 0) {
+        console.log(items)
+        if (!items || items.length === 0) {
+            console.log(items)
             return Array.from(Array(getListSize()).keys()).map(
                 item => <AudioListItem key={item} skeleton={true}/>
             )

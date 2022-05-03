@@ -26,12 +26,20 @@ const programsSlice = createSlice({
             if (section) {
                 section.contenido = audioList
             }
+        },
+        unlinkSectionAudios(state, action) {
+            const {id, sectionId} = action.payload
+            const program = state.find(program => program.id === id)
+            const section = program && program.sections && program.sections.find(section => section.id === sectionId)
+            if (section) {
+                section.contenido = []
+            }
         }
 
     }
 })
 
-const {init, setSection, setSectionAudios} = programsSlice.actions
+const {init, setSection, setSectionAudios, unlinkSectionAudios} = programsSlice.actions
 
 export default programsSlice.reducer
 
@@ -50,5 +58,11 @@ export const setSectionAction = (id, sections) => {
 export const setSectionAudiosAction = (id, sectionId, audioList) => {
     return async (dispatch) => {
         dispatch(setSectionAudios({id, sectionId, audioList}))
+    }
+}
+
+export const unlinkSectionAudiosAction = (id, sectionId) => {
+    return async (dispatch) => {
+        dispatch(unlinkSectionAudios({id, sectionId}))
     }
 }

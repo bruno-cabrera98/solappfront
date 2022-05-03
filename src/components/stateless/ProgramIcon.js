@@ -9,6 +9,8 @@ const skeletonAnimation = keyframes`
   }
 `
 
+const transformUrl = (url) => `https${url.slice(4)}`
+
 const ProgramIcon = styled.div`
   height: 40px;
   min-height: 40px;
@@ -40,7 +42,7 @@ const ProgramIcon = styled.div`
     animation-iteration-count: infinite;
     animation-timing-function: linear;
   ` : css`
-    background-image: url(${icon || ''});
+    background-image: url(${transformUrl(icon) || ''});
   `}
   display: inline-block;
   

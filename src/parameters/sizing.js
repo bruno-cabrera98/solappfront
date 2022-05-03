@@ -8,6 +8,11 @@ const size = {
     desktop: '2560px'
 }
 
+export const sizeInt = Object.keys(size).reduce((result, key) => {
+    result[key] = parseInt(size[key].slice(0,-2))
+    return result
+}, {})
+
 export const device = {
     mobileS: `(min-width: ${size.mobileS})`,
     mobileM: `(min-width: ${size.mobileM})`,
