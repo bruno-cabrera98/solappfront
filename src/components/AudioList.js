@@ -30,7 +30,7 @@ const AudioListMenuWrapper = styled.div`
   color: white;
   top: -13px;
   font-size: 16px;
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   margin-left: 5px;
   display: flex;
   align-items: center;
@@ -57,12 +57,18 @@ const AudioListWrapper = styled.div`
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  transition: height .2s ease-in-out;
-  ${({expanded, size}) => !expanded ? css `
-    height: 100px;
-  ` : css`
-    height: ${20 + size*60}px;
-  `}
+  transition: height .2s linear;
+  ${({expanded, size}) => {
+    if (!expanded)
+      return css`
+        height: 100px;
+      `
+    else {
+      return css`
+        height: ${20 + size * 60}px;
+      `
+    }
+  }}
 `
 
 const AudioListPagerWrapper = styled.div`
@@ -75,7 +81,7 @@ const AudioListPagerWrapper = styled.div`
 const ExpandAudios = styled.div`
   color: #a170d7;
   font-size: 14px;
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   margin:auto;
   display: flex;
   align-items: center;
@@ -120,10 +126,7 @@ const AudioList = (
         {page && expanded && <AudioListPagerWrapper>
             <Pager nextPage={nextPage} previousPage={previousPage} page={page}/>
         </AudioListPagerWrapper>}
-        {expanded === false && <ExpandAudios onClick={switchExpander}>Listar mas audios</ExpandAudios>
-
-
-        }
+        {expanded === false && <ExpandAudios onClick={switchExpander}>Listar mas audios</ExpandAudios>}
     </AudioListWrapper>
 
 }

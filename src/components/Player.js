@@ -33,7 +33,7 @@ const InnerPlayerWrapper = styled.div`
 `
 
 const TimerWrapper = styled.div`
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   display: flex;
   color: white;
   background-image: linear-gradient(67deg,#e8154a 0%,#e87630 45%,#e8d615 100%);

@@ -49,7 +49,7 @@ const PagerPage = styled.div`
   height: 40px;
   box-sizing: border-box;
   line-height: 20px;
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   font-weight: 700;
   color:white;
 

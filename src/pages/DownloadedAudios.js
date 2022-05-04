@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import db from "../db";
 import AudioLine from "../components/stateless/AudioLine";
+import AudioList from "../components/AudioList";
 
 
 const DownloadedAudios = () => {
@@ -8,7 +9,14 @@ const DownloadedAudios = () => {
 
     useEffect(() => {
         db.audios.toArray().then(
-            items => setDownloads(items)
+            items => setDownloads(items.map(item =>
+            ({
+                ...item,
+                programa : {
+                    icon: item.icon
+                },
+
+            })))
         )
     }, [])
 
@@ -19,9 +27,12 @@ const DownloadedAudios = () => {
     }
 
     return (
-        <div>
-            {downloads && downloads.map(item => <AudioLine key={item.id} item={item} handleDeleteAudio={handleDeleteAudio}/>)}
-        </div>
+        <AudioList
+            items={downloads}
+            title={'Descargas'}
+            page={false}
+            expanded={true}
+        />
     )
 }
 

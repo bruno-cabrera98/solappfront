@@ -40,13 +40,13 @@ const AudioCardWrapper = styled.div`
 `
 
 const AudioCardTitle = styled.h3`
-  font-family: "Raleway", sans-serif;
+  font-family: "Raleway", Raleway, sans-serif;
   font-size: 16px;
   text-shadow: 1px 1px 2px #070c13;
 `
 
 const AudioSubtitle = styled.h4`
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   font-size: 14px;
   text-shadow: 1px 1px 2px #070c13;
 `
@@ -74,7 +74,6 @@ const AudioCard = ({item}) => {
             dispatch(setAudioDownloadingAction(id, true))
             const res = await service.getAudio(id)
             audioBlob = res.data
-            console.log('Audio saved in DB')
             dispatch(setAudioDownloadedAction(id, true))
             dispatch(setAudioDownloadingAction(id, false))
             db.audios.add({id:id, blob:audioBlob, titulo:item.titulo, duracion:item.duracion, icon:item.programa.icon}, [id])

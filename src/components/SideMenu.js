@@ -51,7 +51,8 @@ const MenuItemWrapper = styled.div`
   display: flex;
   color: white;
   
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
+  font-weight: 600;
   align-items: center;
   :hover {
     background-color: #190a29;
@@ -60,7 +61,7 @@ const MenuItemWrapper = styled.div`
     background-color: #240347;
   ` : ''}
   ${({mobile}) => mobile ? css`
-    font-size: 20px;
+    font-size: 16px;
     padding: 5px;
   ` : css`
     font-size: 13px;
@@ -68,10 +69,10 @@ const MenuItemWrapper = styled.div`
   
 `
 
-const MenuItem = ({program, active, mobile}) => {
+const MenuItem = ({program, active, mobile, handleClick}) => {
 
     return (
-        <Link to={`/programs/${program.id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/programs/${program.id}`} style={{ textDecoration: 'none' }} onClick={handleClick}>
             <MenuItemWrapper mobile={mobile} active={active}>
                 <ProgramIcon icon={program['icon-mini']} mini/>
                 {program.nombre}
@@ -92,15 +93,11 @@ const SideMenu = () => {
         onSwipedRight: ({ dir, event }) => {
             if (!expanded && width <= sizeInt.mobileL) {
                 setExpanded(true)
-                document.body.style.overflow = "hidden"
-                console.log(expanded)
             }
         },
         onSwipedLeft: ({ dir, event }) => {
             if (expanded && width <= sizeInt.mobileL) {
                 setExpanded(false)
-                document.body.style.overflow = "scroll"
-                console.log(expanded)
             }
         },
         preventDefaultTouchmoveEvent: true
@@ -109,6 +106,16 @@ const SideMenu = () => {
     useEffect(() => {
         documentRef(document);
     });
+
+    useEffect(() => {
+        if (width <= sizeInt.mobileL) {
+            if (expanded) {
+                document.body.style['overflow-y'] = "hidden"
+            } else {
+                document.body.style['overflow-y'] = "scroll"
+            }
+        }
+    }, [expanded])
 
     useEffect(() => {
         api.getProgramas().then(
@@ -122,7 +129,16 @@ const SideMenu = () => {
         </SideMenuWrapper>
         :
         <SideMenuResponsiveWrapper expanded={expanded}>
-            {programs && programs.filter(program => program.publicar).map(program => <MenuItem mobile active={match && program.id === match.params.id} program={program} key={program.id}/> )}
+            {programs && programs
+                .filter(program => program.publicar)
+                .map(program =>
+                    <MenuItem mobile
+                              active={match && program.id === match.params.id}
+                              program={program}
+                              key={program.id}
+                              handleClick={() => setExpanded(false)}
+                    />
+                )}
         </SideMenuResponsiveWrapper >
 }
 

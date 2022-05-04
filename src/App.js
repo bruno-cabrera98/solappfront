@@ -16,12 +16,19 @@ import SectionAudios from "./pages/SectionAudios";
 import {OtherMenu, SideMenu} from "./components/SideMenu";
 import {ContentWrapper, PageContainer} from "./components/stateless/ContentWrapper";
 
+import font from "./fonts/raleway.ttf"
+
 const GlobalStyle = createGlobalStyle`
   body {
     background: linear-gradient(to bottom, #0f031c 0%, #03031c 50%, #03031c 100%);
     margin:auto;
     position: relative;
     max-width: 1600px;
+  }
+  
+  @font-face {
+    font-family: 'Raleway';
+    src: local('raleway'), url(${font}) format('truetype');
   }
 `
 

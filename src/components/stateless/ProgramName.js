@@ -9,7 +9,7 @@ const ProgramName = styled.div`
   justify-content: center;
   display: flex;
   align-items: center;
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
 `
 
 export default ProgramName

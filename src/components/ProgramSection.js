@@ -6,7 +6,6 @@ import db from "../db";
 
 const ProgramSection = ({programId, sec}) => {
     const [page, setPage] = useState(1)
-    console.log(sec.contenido)
 
     const [expanded, setExpanded] = useState(false)
 

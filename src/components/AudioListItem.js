@@ -48,7 +48,7 @@ const ItemText = styled.h1`
   margin: 0 0;
   color: white;
   font-size: 12px;
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   position: relative;
   min-width: 0;
   ${({skeleton}) => skeleton ? css`
@@ -89,7 +89,7 @@ const ItemTitle = styled(ItemText)`
 `
 
 const ItemSubtitle = styled(ItemText)`
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   color: white;
   margin: 0 0;
 
@@ -177,7 +177,6 @@ const AudioListItem = ({item, skeleton, dummy}) => {
             dispatch(setAudioDownloadingAction(id, true))
             const res = await service.getAudio(id)
             audioBlob = res.data
-            console.log('Audio saved in DB')
             dispatch(setAudioDownloadedAction(id, true))
             dispatch(setAudioDownloadingAction(id, false))
             db.audios.add({id:id, blob:audioBlob, titulo:item.titulo, duracion:item.duracion, icon:item.programa.icon}, [id])

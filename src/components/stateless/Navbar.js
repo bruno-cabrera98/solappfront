@@ -4,7 +4,7 @@ import styled from "styled-components";
 const NavBarItem = styled(Link)`
   text-decoration: none;
   color: white;
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   font-size: 18px;
   height: 40px;
   margin: 10px 5px ;

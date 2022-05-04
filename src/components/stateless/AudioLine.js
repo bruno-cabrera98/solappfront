@@ -21,7 +21,7 @@ const AudioLineContainer = styled.div`
 `
 
 const ProgramTime = styled.h3`
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   color: white;
 `
 
@@ -37,7 +37,7 @@ const DeleteButton = styled.button`
 
 
 const AudioLine = ({item, handleDeleteAudio}) => {
-
+    console.log(item)
     const deleteAudio = (event) => {
         event.preventDefault()
         handleDeleteAudio(item.id)
