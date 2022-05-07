@@ -1,12 +1,11 @@
 import {useEffect, useRef } from "react";
-import db from "../db";
-import {useDispatch, useSelector} from "react-redux";
-import {initializeAction, pauseAction, setAudioAction, resumeAction, updateAction} from "../reducers/playerReducer";
+import {useDispatch} from "react-redux";
+import {initializeAction, updateAction} from "../reducers/playerReducer";
 import styled from "styled-components";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Slider from "./stateless/Slider";
 import PlayerTitle from "./stateless/PlayerTitle";
 import PlayButton from "./stateless/PlayButton";
+import usePlayer from "../hooks/usePlayer";
 
 const PlayerWrapper = styled.div`
   display: flex;
@@ -17,7 +16,7 @@ const PlayerWrapper = styled.div`
   box-shadow: 0 10px 20px 10px rgb(8, 1, 15);
   transition: all 0.3s ease-in-out;
   background-color: #08010f;
-  border-top: 1px solid #28044f;
+  border-top: 1px solid ${props => props.theme.purple};
   box-sizing: border-box;
   flex-direction: column;
   width: 100%;
@@ -61,7 +60,7 @@ const Timer = ({time, duration}) => {
 }
 
 const Player = () => {
-    const player = useSelector(state => state.player)
+    const player = usePlayer()
     const audioRef = useRef()
     const dispatch = useDispatch()
 
@@ -73,6 +72,11 @@ const Player = () => {
         if(player.playingUrl && audioRef.current){
             audioRef.current.pause();
             audioRef.current.load();
+            if (player.playing) {
+                audioRef.current.play()
+            } else {
+                audioRef.current.pause()
+            }
         }
     }, [player.playingUrl])
 
@@ -82,14 +86,22 @@ const Player = () => {
         }
     }, [player.second])
 
+    useEffect(() => {
+        if(player.playingUrl && audioRef.current) {
+            if (player.playing) {
+                audioRef.current.play()
+            } else {
+                audioRef.current.pause()
+            }
+        }
+    }, [player.playing])
+
     const handlePlay = (event) => {
         event.preventDefault()
         if (player.playing) {
-            dispatch(pauseAction())
-            audioRef.current.pause()
+            player.pause()
         } else {
-            dispatch(resumeAction())
-            audioRef.current.play()
+            player.resume()
         }
     }
 

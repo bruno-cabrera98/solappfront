@@ -2,10 +2,10 @@ import styled from "styled-components";
 import {RoundButton} from "./Button";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
-import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
+import {faAnglesLeft, faAnglesRight} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-library.add(faArrowLeft, faArrowRight)
+library.add(faAnglesLeft, faAnglesRight)
 
 const PagerContainer = styled.div`
   display: flex;
@@ -71,13 +71,13 @@ const Pager = ({page, nextPage, previousPage}) => {
         <PagerContainer>
             <PagerWrapper>
                 <PagerButton onClick={handlePreviousPage}>
-                    <FontAwesomeIcon icon="fa-solid fa-arrow-left" size="sm"/>
+                    <FontAwesomeIcon icon="fa-solid fa-angles-left" size="sm"/>
                 </PagerButton>
                 <PagerPage>
                     {page}
                 </PagerPage>
                 <PagerButton onClick={handleNextPage}>
-                    <FontAwesomeIcon icon="fa-solid fa-arrow-right" size="xs"/>
+                    <FontAwesomeIcon icon="fa-solid fa-angles-right" size="xs"/>
                 </PagerButton>
             </PagerWrapper>
         </PagerContainer>

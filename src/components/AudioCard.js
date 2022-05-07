@@ -1,19 +1,13 @@
-import {useDispatch} from "react-redux";
-import {setAudioAction} from "../reducers/playerReducer";
-import db from "../db";
-import service from "../service/api";
-
-import {setAudioDownloadedAction, setAudioDownloadingAction} from "../reducers/audioListReducer";
 import Spinner from "./stateless/Spinner";
 import styled from "styled-components";
 import {Button, RoundButton} from "./stateless/Button";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
+import usePlayer from "../hooks/usePlayer";
+import {H3, H4} from "./stateless/Atoms/Fonts";
 
 library.add(faPlus)
-
 
 const BackgroundImage = styled.div`
   height: 100%;
@@ -39,14 +33,14 @@ const AudioCardWrapper = styled.div`
   overflow: hidden;
 `
 
-const AudioCardTitle = styled.h3`
-  font-family: "Raleway", Raleway, sans-serif;
+const AudioCardTitle = styled(H3)`
+  color: ${props => props.theme.fontWhite};
   font-size: 16px;
   text-shadow: 1px 1px 2px #070c13;
 `
 
-const AudioSubtitle = styled.h4`
-  font-family: Raleway, sans-serif;
+const AudioSubtitle = styled(H4)`
+  color: ${props => props.theme.fontWhite};
   font-size: 14px;
   text-shadow: 1px 1px 2px #070c13;
 `
@@ -60,24 +54,16 @@ const AudioButtonContainer = styled.div`
 `
 
 const AudioCard = ({item}) => {
-    const dispatch = useDispatch()
+    const player = usePlayer()
+
     const handlePlay = (event) => {
         event.preventDefault()
-        dispatch(setAudioAction(item.id, item.titulo))
+        player.play(item)
     }
 
     const handleDownload = async (event) => {
         event.preventDefault()
-        const {id} = item
-        let audioBlob = await db.audios.get(id)
-        if (!audioBlob) {
-            dispatch(setAudioDownloadingAction(id, true))
-            const res = await service.getAudio(id)
-            audioBlob = res.data
-            dispatch(setAudioDownloadedAction(id, true))
-            dispatch(setAudioDownloadingAction(id, false))
-            db.audios.add({id:id, blob:audioBlob, titulo:item.titulo, duracion:item.duracion, icon:item.programa.icon}, [id])
-        }
+        await player.download(item)
     }
 
     return item &&

@@ -1,18 +1,17 @@
 import ProgramIcon from "./stateless/ProgramIcon";
 import {Button} from "./stateless/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useDispatch} from "react-redux";
-import {setAudioAction} from "../reducers/playerReducer";
-import db from "../db";
-import {setAudioDownloadedAction, setAudioDownloadingAction} from "../reducers/audioListReducer";
-import service from "../service/api";
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faDownload} from "@fortawesome/free-solid-svg-icons";
+import {faDownload, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {device} from "../parameters/sizing"
 
 import styled, {keyframes, css} from "styled-components";
+import usePlayer from "../hooks/usePlayer";
+import {H1} from "./stateless/Atoms/Fonts";
+import {useSelector} from "react-redux";
+import Spinner from "./stateless/Spinner";
 
-library.add(faDownload)
+library.add(faDownload, faTrashCan)
 
 const DetailsContainer = styled.div`
   display: flex;
@@ -44,11 +43,10 @@ const skeletonAnimation = keyframes`
   }
 `
 
-const ItemText = styled.h1`
+const ItemText = styled(H1)`
   margin: 0 0;
-  color: white;
+  color: ${props => props.theme.fontWhite};
   font-size: 12px;
-  font-family: Raleway, sans-serif;
   position: relative;
   min-width: 0;
   ${({skeleton}) => skeleton ? css`
@@ -143,6 +141,16 @@ const ButtonDownload = ({handleDownload}) => (
     </Button>
 )
 
+const ButtonDelete = ({handleDelete}) => (
+    <Button onClick={handleDelete}>
+        <FontAwesomeIcon icon="fa-solid fa-trash-can" />
+    </Button>
+)
+
+const ButtonSpinner = () => <Button greyed>
+    <Spinner/>
+</Button>
+
 const ButtonGroup = styled.div`
   ${Button} {
     margin: 0;
@@ -163,24 +171,32 @@ const ButtonGroup = styled.div`
 
 const AudioListItem = ({item, skeleton, dummy}) => {
     const icon = item && item.programa && item.programa.icon
-    const dispatch = useDispatch()
+
+    const downloadedState = useSelector(state => item && state.downloadList.find(audio => audio.id === item.id))
+    const player = usePlayer()
 
     const handlePlay = (event) => {
         event.preventDefault()
-        dispatch(setAudioAction(item.id, item.titulo))
+        player.play(item)
     }
+
     const handleDownload = async (event) => {
         event.preventDefault()
-        const {id} = item
-        let audioBlob = await db.audios.get(id)
-        if (!audioBlob) {
-            dispatch(setAudioDownloadingAction(id, true))
-            const res = await service.getAudio(id)
-            audioBlob = res.data
-            dispatch(setAudioDownloadedAction(id, true))
-            dispatch(setAudioDownloadingAction(id, false))
-            db.audios.add({id:id, blob:audioBlob, titulo:item.titulo, duracion:item.duracion, icon:item.programa.icon}, [id])
-        }
+        await player.download(item)
+    }
+
+    const handleDelete = async (event) => {
+        event.preventDefault()
+        await player.delete(item)
+    }
+
+    const downloadButton = () => {
+        if (!downloadedState) {
+            return <ButtonDownload handleDownload={handleDownload}/>
+        } else if (downloadedState.state === 'downloaded') {
+            return <ButtonDelete handleDelete={handleDelete} />
+        } else return  <ButtonSpinner/>
+
     }
 
     return (
@@ -196,7 +212,7 @@ const AudioListItem = ({item, skeleton, dummy}) => {
                 <ItemTime skeleton={skeleton}>{item && item.duracion_mp3}</ItemTime>
                 <ButtonGroup>
                     <ButtonPlay handlePlay={handlePlay}/>
-                    <ButtonDownload handleDownload={handleDownload}/>
+                    {downloadButton()}
                 </ButtonGroup>
             </ActionsContainer>
         </ItemWrapper>

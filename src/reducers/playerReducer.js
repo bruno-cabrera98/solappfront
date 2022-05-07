@@ -14,7 +14,7 @@ const playerSlice = createSlice({
     initialState: initialState,
     reducers: {
         setAudio(state, action) {
-            state.playing = false
+            state.playing = action.payload.play
             state.playingUrl = action.payload.url
             state.second = 0
             state.audioTitle = action.payload.title
@@ -43,13 +43,13 @@ export const { setAudio, stop, resume, pause, update, initialize } = playerSlice
 
 export default playerSlice.reducer
 
-export const setAudioAction = (id, title) => {
+export const setAudioAction = (id, title, play) => {
     return async (dispatch, getState) => {
         let url = `${cdnUrl}${id}.mp3`
         const audioBlob = await db.audios.get(id)
         if (audioBlob)
             url = URL.createObjectURL(audioBlob.blob)
-        dispatch(setAudio({url, title}))
+        dispatch(setAudio({url, title, play}))
         let audioPlaying = JSON.parse(localStorage.getItem('audioPlaying'))
         audioPlaying = {
             ...audioPlaying,

@@ -6,10 +6,10 @@ import {setSectionAction} from "../reducers/programsReducer";
 import {useDispatch, useSelector} from "react-redux";
 import ProgramSection from "../components/ProgramSection";
 import styled from "styled-components";
+import {H1} from "../components/stateless/Atoms/Fonts";
 
-const Title = styled.h1`
-  font-family: Raleway, sans-serif;
-  color: white;
+const Title = styled(H1)`
+    color: ${props => props.theme.fontWhite}
 `
 
 const ProgramPage = () => {

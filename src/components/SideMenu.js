@@ -19,8 +19,8 @@ const SideMenuWrapper = styled.div`
   z-index: 1;
   top: 60px;
   margin-top: 60px;
-  border-right: 1px solid #28044f;
-  border-left: 1px solid #28044f;
+  border-right: 1px solid ${props => props.theme.purple};
+  border-left: 1px solid ${props => props.theme.purple};
   overflow: auto;
   min-width: 250px;
   box-sizing: border-box;
@@ -58,7 +58,7 @@ const MenuItemWrapper = styled.div`
     background-color: #190a29;
   }
   ${({active}) => active ? css`
-    background-color: #240347;
+    background-color: ${props => props.theme.purple};
   ` : ''}
   ${({mobile}) => mobile ? css`
     font-size: 16px;

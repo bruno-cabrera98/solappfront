@@ -39,11 +39,8 @@ const Navbar = () => {
             <NavBarItem to="/">
                 Home
             </NavBarItem>
-            <NavBarItem to="/programs">
-                Programas
-            </NavBarItem>
             <NavBarItem to="/downloads">
-                    Downloads
+                Downloads
             </NavBarItem>
         </NavContainer>
 

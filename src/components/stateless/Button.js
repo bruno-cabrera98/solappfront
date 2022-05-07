@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 const Button = styled.button`
   border: none;
@@ -11,6 +11,7 @@ const Button = styled.button`
   text-transform: uppercase;
   display: inline-block;
   height: 40px;
+  width: 40px;
   margin: 10px 0px 0px 10px;
   padding: 0px 10px 0px 10px;
   background: #e86215;
@@ -22,6 +23,16 @@ const Button = styled.button`
     background-image: -ms-linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
     box-shadow: 0px 0px 15px rgba(0,0,0,0.71);
   }
+  ${props => props.greyed ? css`
+    background: #7d4f32;
+
+    cursor: auto;
+
+    :hover {
+      background-image: none;
+
+    }
+  ` : css``}
 `
 
 const RoundButton = styled.button`

@@ -1,11 +1,11 @@
 import AudioListItem from "./AudioListItem";
 import styled, {css} from "styled-components";
 import Pager from "./stateless/Pager";
-import {useEffect, useState} from "react";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useSelector} from "react-redux";
 
 library.add(faAngleDown)
 
@@ -53,7 +53,7 @@ const AudioListWrapper = styled.div`
   margin-top: 30px;
   margin-bottom: 10px;
   border-radius: 10px;
-  border: solid 1px #FFF2;
+  border: solid 1px ${props => props.theme.purple};
   width: 100%;
   box-sizing: border-box;
   position: relative;
@@ -119,7 +119,7 @@ const AudioList = (
         {
             emptyList() || items.slice(0, getListSize()).map(
                 item => (
-                    <AudioListItem item={item} />
+                    <AudioListItem key={item.id} item={item} />
                 )
             )
         }

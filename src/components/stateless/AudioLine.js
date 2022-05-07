@@ -7,6 +7,7 @@ import PlayButton from "./PlayButton";
 import {useDispatch} from "react-redux";
 import ProgramIcon from "./ProgramIcon";
 import ProgramName from "./ProgramName";
+import {H3} from "./Atoms/Fonts";
 
 library.add(faTrash)
 
@@ -20,9 +21,8 @@ const AudioLineContainer = styled.div`
   align-items: center;
 `
 
-const ProgramTime = styled.h3`
-  font-family: Raleway, sans-serif;
-  color: white;
+const ProgramTime = styled(H3)`
+  color: ${props => props.theme.fontWhite};
 `
 
 const DeleteButton = styled.button`

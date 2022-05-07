@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
+import db from "../db";
 
 
 const programsSlice = createSlice({
@@ -12,6 +13,7 @@ const programsSlice = createSlice({
             const {id, sections} = action.payload
             const program = state.find(program => program.id === id)
             if (program) {
+
                 program.sections = sections.map(sec => {
                     sec.contenido = [sec.contenido]
                     return sec
@@ -49,7 +51,7 @@ export const initAction = (programs) => {
 }
 
 export const setSectionAction = (id, sections) => {
-    return async (dispatch) => {
+    return (dispatch) => {
         dispatch(setSection({id, sections}))
     }
 }
