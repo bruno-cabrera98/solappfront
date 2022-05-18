@@ -1,20 +1,21 @@
 import {useDispatch, useSelector} from "react-redux";
-import {pauseAction, resumeAction, setAudioAction} from "../reducers/playerReducer";
-import db from "../db";
-import service from "../service/api";
+import {pauseAction, playerStateT, resumeAction, selectPlayer, setAudioAction} from "../reducers/playerReducer";
+import {db, IAudio} from "../db"
+import service from "../service/api"
 import {
     addDownloadAudioAction,
     changeStateAudioAction,
     removeDownloadAudioAction
 } from "../reducers/downloadListReducer";
+import {useAppSelector} from "./redux";
 
 const usePlayer = () => {
     const dispatch = useDispatch()
-    const player = useSelector(state => state.player)
+    const player = useAppSelector(selectPlayer)
     return {
         ...player,
-        play(item) {
-            dispatch(setAudioAction(item.id, item.titulo, true))
+        play(item : AudioItem) {
+            dispatch(setAudioAction(item, true))
         },
         resume() {
             dispatch(resumeAction())
@@ -22,18 +23,26 @@ const usePlayer = () => {
         pause() {
             dispatch(pauseAction())
         },
-        async download(item) {
+        async download(item : AudioItem) {
             const {id} = item
             let audioBlob = await db.audios.get(id)
             if (!audioBlob) {
                 dispatch(addDownloadAudioAction({...item, state: 'downloading'}))
                 const res = await service.getAudio(id)
                 audioBlob = res.data
-                dispatch(changeStateAudioAction(item.id, 'downloaded'))
-                db.audios.add({id:id, blob:audioBlob, titulo:item.titulo, duracion:item.duracion, icon:item.programa.icon}, [id])
+                if (audioBlob) {
+                    dispatch(changeStateAudioAction(item.id, 'downloaded'))
+                    db.audios.add({
+                        id:id,
+                        blob:audioBlob,
+                        title: item.title,
+                        length: item.length,
+                        icon_url: item.icon_url
+                    }, id)
+                }
             }
         },
-        delete(item) {
+        delete(item : AudioItem) {
             db.audios.where('id').equals(item.id).delete()
             dispatch(removeDownloadAudioAction(item.id))
         }

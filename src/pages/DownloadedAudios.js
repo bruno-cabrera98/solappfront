@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import db from "../db";
+import {db} from "../db";
 import AudioList from "../components/AudioList";
 import usePlayer from "../hooks/usePlayer";
 

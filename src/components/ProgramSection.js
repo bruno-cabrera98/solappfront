@@ -1,7 +1,7 @@
 import AudioList from "./AudioList";
 import {useEffect, useRef, useState} from "react";
 import service from "../service/api";
-import db from "../db";
+import {db} from "../db";
 
 const ProgramSection = ({programId, sec}) => {
     const [page, setPage] = useState(1)

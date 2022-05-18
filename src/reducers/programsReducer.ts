@@ -1,6 +1,5 @@
-import {createSlice} from "@reduxjs/toolkit";
-import db from "../db";
-
+import {AnyAction, createSlice, ThunkAction} from "@reduxjs/toolkit";
+import {RootState} from "../store";
 
 const programsSlice = createSlice({
     name: 'programs',
@@ -44,25 +43,25 @@ const {init, setSection, setSectionAudios, unlinkSectionAudios} = programsSlice.
 
 export default programsSlice.reducer
 
-export const initAction = (programs) => {
+export const initAction = (programs : any) : ThunkAction<void, RootState, unknown, AnyAction> => {
     return async (dispatch) => {
         dispatch(init(programs))
     }
 }
 
-export const setSectionAction = (id, sections) => {
+export const setSectionAction = (id : string, sections : any) : ThunkAction<void, RootState, unknown, AnyAction> => {
     return (dispatch) => {
         dispatch(setSection({id, sections}))
     }
 }
 
-export const setSectionAudiosAction = (id, sectionId, audioList) => {
+export const setSectionAudiosAction = (id : string, sectionId : string, audioList : any) : ThunkAction<void, RootState, unknown, AnyAction> => {
     return async (dispatch) => {
         dispatch(setSectionAudios({id, sectionId, audioList}))
     }
 }
 
-export const unlinkSectionAudiosAction = (id, sectionId) => {
+export const unlinkSectionAudiosAction = (id : string, sectionId : string) : ThunkAction<void, RootState, unknown, AnyAction> => {
     return async (dispatch) => {
         dispatch(unlinkSectionAudios({id, sectionId}))
     }

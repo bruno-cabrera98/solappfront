@@ -15,8 +15,9 @@ import {SideMenu} from "./components/SideMenu";
 import {ContentWrapper, PageContainer} from "./components/stateless/ContentWrapper";
 import theme from './parameters/theme'
 import font from "./fonts/raleway.ttf"
-import db from "./db";
+import {db} from "./db";
 import {initializeDownloadListAction} from "./reducers/downloadListReducer";
+import PlayerMenu from "./components/PlayerMenu";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -73,6 +74,7 @@ function App() {
                         </Routes>
                     </ContentWrapper>
                 </PageContainer>
+                <PlayerMenu/>
                 <Player/>
             </ThemeProvider>
         </div>

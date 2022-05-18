@@ -2,7 +2,7 @@ import AudioCard from "../components/AudioCard";
 import Pager from "../components/stateless/Pager";
 import {useEffect, useState} from "react";
 import service from "../service/api";
-import db from "../db";
+import {db} from "../db";
 import {useParams} from "react-router";
 import AudioListItem from "../components/AudioListItem";
 import ProgramCard from "../components/stateless/ProgramCard";
