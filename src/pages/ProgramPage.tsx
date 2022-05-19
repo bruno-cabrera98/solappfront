@@ -1,12 +1,13 @@
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import api from '../service/api'
-import AudioList from "../components/AudioList";
-import {setSectionAction} from "../reducers/programsReducer";
-import {useDispatch, useSelector} from "react-redux";
+import {selectSections, setSectionAction} from "../reducers/programsReducer";
+import {useDispatch} from "react-redux";
 import ProgramSection from "../components/ProgramSection";
 import styled from "styled-components";
 import {H1} from "../components/stateless/Atoms/Fonts";
+import {useAppDispatch, useAppSelector} from "../hooks/redux";
+import React from "react";
 
 const Title = styled(H1)`
     color: ${props => props.theme.fontWhite}
@@ -14,14 +15,10 @@ const Title = styled(H1)`
 
 const ProgramPage = () => {
     const {id} = useParams()
-    const [program, setProgram] = useState({})
+    const [program, setProgram] = useState<undefined | Program>(undefined)
 
-    const sections = useSelector(state => {
-        const programs = state.programs && state.programs.find(program => program.id === id)
-        return (programs && programs.sections) || []
-    })
-
-    const dispatch = useDispatch()
+    const sections = useAppSelector(selectSections(id))
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (id) {
@@ -34,7 +31,7 @@ const ProgramPage = () => {
     }, [id])
 
     return program && <div>
-        <Title>{program.nombre}</Title>
+        <Title>{program.name}</Title>
         {sections.map(sec => <ProgramSection
             key={sec.id}
             programId={id}

@@ -1,12 +1,13 @@
 import AudioList from "./AudioList";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import service from "../service/api";
-import {db} from "../db";
+import React from "react";
 
-const ProgramSection = ({programId, sec}) => {
+const ProgramSection = (props : {programId : string, sec : Section}) => {
     const [page, setPage] = useState(1)
-
     const [expanded, setExpanded] = useState(false)
+
+    const {programId, sec} = props
 
     useEffect(() => {
         if (expanded) {
@@ -14,27 +15,20 @@ const ProgramSection = ({programId, sec}) => {
         }
     }, [page, expanded])
 
-    const [audioList, setAudioList] = useState(sec.contenido)
+    const [audioList, setAudioList] = useState<false | AudioItem[]>(sec.content)
 
-    const getAudios = (section, page) => {
-
+    const getAudios = (section : string, page : number) => {
         setAudioList(false)
         service.getAudioSection(programId, section, page).then(
-            res => db.audios.orderBy('id').keys()
-                .then(keys => {
-                    setAudioList(res.data.records.map(record =>
-                        ({...record, downloaded: keys.includes(record.id)})
-                    ))
-                })
+            audios => setAudioList(audios)
         )
-
     }
 
     return (
         <AudioList
             key={sec.id}
             items={audioList}
-            title={sec.nombre}
+            title={sec.name}
             page={page}
             nextPage={() => setPage(page + 1)}
             previousPage={() =>  setPage(page - 1)}
