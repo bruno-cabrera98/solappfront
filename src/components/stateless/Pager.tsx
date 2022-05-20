@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import {RoundButton} from "./Button";
-import {library} from "@fortawesome/fontawesome-svg-core";
+import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
 
 import {faAnglesLeft, faAnglesRight} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import React from "react";
 
 library.add(faAnglesLeft, faAnglesRight)
 
@@ -12,6 +12,7 @@ const PagerContainer = styled.div`
   align-items: center;
   justify-content: center;
 `
+
 
 const PagerWrapper = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ const PagerButton = styled.button`
   font-size: 20px;
   border: none;
   cursor: pointer;
-  text-shadow: 0px 0px 10px #070c13;
+  text-shadow: 0 0 10px #070c13;
   :hover {
     background: rgba(0,0,0,.2);
   }
@@ -52,17 +53,18 @@ const PagerPage = styled.div`
   font-family: Raleway, sans-serif;
   font-weight: 700;
   color:white;
-
-  text-shadow: 0px 0px 10px #070c13;
+  text-shadow: 0 0 10px #070c13;
 `
 
-const Pager = ({page, nextPage, previousPage}) => {
-    const handlePreviousPage = async (event) => {
+const FaAnglesRightIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angles-right'})
+const FaAnglesLeftIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angles-left'})
+const Pager = ({page, nextPage, previousPage} : {page: number, nextPage: () => void, previousPage: () => void}) => {
+    const handlePreviousPage = async (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         previousPage()
     }
 
-    const handleNextPage = async (event) => {
+    const handleNextPage = async (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         nextPage()
     }
@@ -71,13 +73,13 @@ const Pager = ({page, nextPage, previousPage}) => {
         <PagerContainer>
             <PagerWrapper>
                 <PagerButton onClick={handlePreviousPage}>
-                    <FontAwesomeIcon icon="fa-solid fa-angles-left" size="sm"/>
+                    <FontAwesomeIcon icon={FaAnglesLeftIcon} size="sm"/>
                 </PagerButton>
                 <PagerPage>
                     {page}
                 </PagerPage>
                 <PagerButton onClick={handleNextPage}>
-                    <FontAwesomeIcon icon="fa-solid fa-angles-right" size="xs"/>
+                    <FontAwesomeIcon icon={FaAnglesRightIcon} size="xs"/>
                 </PagerButton>
             </PagerWrapper>
         </PagerContainer>

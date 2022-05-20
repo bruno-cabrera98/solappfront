@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ProgramIcon from "./ProgramIcon";
 import ProgramName from "./ProgramName";
 import {Link} from "react-router-dom";
+import React from "react";
 
 const ProgramCardContainer = styled.div`
   width: 300px;
@@ -28,18 +29,18 @@ const CardImage = styled.img`
 `
 
 
-const ProgramCard = ({program}) => {
+const ProgramCard = ({program} : {program: Program}) => {
 
     return (
         <Link to={`/programs/${program.id}`} style={{ textDecoration: 'none' }}>
             <ProgramCardContainer>
                 <CardTitle>
                     <ProgramName>
-                        <ProgramIcon icon={program.icon}/>
-                        {program.nombre}
+                        <ProgramIcon icon={program.icon_url}/>
+                        {program.name}
                     </ProgramName>
                 </CardTitle>
-                <CardImage src={program.img_360}/>
+                <CardImage src={program.img_url}/>
             </ProgramCardContainer>
         </Link>
     )

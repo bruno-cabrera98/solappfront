@@ -1,15 +1,17 @@
 import ProgramIcon from "./stateless/ProgramIcon";
 import {Button} from "./stateless/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {library} from "@fortawesome/fontawesome-svg-core";
+import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
 import {faDownload, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {device} from "../parameters/sizing"
 
 import styled, {keyframes, css} from "styled-components";
 import usePlayer from "../hooks/usePlayer";
 import {H1} from "./stateless/Atoms/Fonts";
-import {useSelector} from "react-redux";
 import Spinner from "./stateless/Spinner";
+import React from "react";
+import {useAppSelector} from "../hooks/redux";
+import {selectDownloadedItem} from "../reducers/downloadListReducer";
 
 library.add(faDownload, faTrashCan)
 
@@ -43,7 +45,7 @@ const skeletonAnimation = keyframes`
   }
 `
 
-const ItemText = styled(H1)`
+const ItemText = styled(H1)<{skeleton?: boolean }>`
   margin: 0 0;
   color: ${props => props.theme.fontWhite};
   font-size: 12px;
@@ -54,7 +56,7 @@ const ItemText = styled(H1)`
     height: 16px;
 
     :after {
-      top: 0px;
+      top: 0;
       visibility: visible;
       content: '';
       height: 12px;
@@ -93,7 +95,7 @@ const ItemSubtitle = styled(ItemText)`
 
   font-size: 8px;
 
-  @media (${device.table}) {
+  @media (${device.tablet}) {
     font-size: 10px;
   }
   
@@ -129,21 +131,24 @@ const ActionsContainer = styled.div`
   align-items: center;
 `
 
-const ButtonPlay = ({handlePlay}) => (
+const FaPlayIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'play'})
+const ButtonPlay = ({handlePlay} : {handlePlay: React.MouseEventHandler<HTMLButtonElement> | undefined}) => (
     <Button onClick={handlePlay}>
-        <FontAwesomeIcon icon="fa-solid fa-play" />
+        <FontAwesomeIcon icon={FaPlayIcon} />
     </Button>
 )
 
-const ButtonDownload = ({handleDownload}) => (
+const FaDownloadIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'download'})
+const ButtonDownload = ({handleDownload} : {handleDownload: React.MouseEventHandler<HTMLButtonElement> | undefined}) => (
     <Button onClick={handleDownload}>
-        <FontAwesomeIcon icon="fa-solid fa-download" />
+        <FontAwesomeIcon icon={FaDownloadIcon} />
     </Button>
 )
 
-const ButtonDelete = ({handleDelete}) => (
+const FaTrashCanIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'trash-can'})
+const ButtonDelete = ({handleDelete} : {handleDelete: React.MouseEventHandler<HTMLButtonElement> | undefined}) => (
     <Button onClick={handleDelete}>
-        <FontAwesomeIcon icon="fa-solid fa-trash-can" />
+        <FontAwesomeIcon icon={FaTrashCanIcon} />
     </Button>
 )
 
@@ -169,47 +174,51 @@ const ButtonGroup = styled.div`
   align-items: center;
 `
 
-const AudioListItem = ({item, skeleton, dummy}) => {
-    const icon = item && item.programa && item.programa.icon
+const AudioListItem = ({item, skeleton} : {item?: AudioItem, skeleton?: boolean}) => {
+    const icon = item && item.icon_url
 
-    const downloadedState = useSelector(state => item && state.downloadList.find(audio => audio.id === item.id))
+    const downloadedState = useAppSelector(selectDownloadedItem(item && item.id))
+
     const player = usePlayer()
 
-    const handlePlay = (event) => {
+    const handlePlay = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        player.play(item)
+        if (item)
+            player.play(item)
     }
 
-    const handleDownload = async (event) => {
+    const handleDownload = async (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        await player.download(item)
+        if (item)
+            await player.download(item)
     }
 
-    const handleDelete = async (event) => {
+    const handleDelete = async (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        await player.delete(item)
+        if (item)
+            await player.delete(item)
     }
-
     const downloadButton = () => {
-        if (!downloadedState) {
+
+        if (downloadedState === 'notDownloaded') {
             return <ButtonDownload handleDownload={handleDownload}/>
-        } else if (downloadedState.state === 'downloaded') {
+        } else if (downloadedState === 'downloaded') {
             return <ButtonDelete handleDelete={handleDelete} />
         } else return  <ButtonSpinner/>
 
     }
 
     return (
-        <ItemWrapper dummy={dummy}>
+        <ItemWrapper>
             <DetailsContainer>
                 <ProgramIcon icon={icon} skeleton={skeleton} small/>
                 <TitleContainer>
-                    <ItemTitle skeleton={skeleton}>{(item && item.titulo) || 'Lorem ipsum chupame esta'}</ItemTitle>
-                    <ItemSubtitle skeleton={skeleton}>{(item && item.fechaEmision_full) || 'Lorem ipsum chupame esta'}</ItemSubtitle>
+                    <ItemTitle skeleton={skeleton}>{(item && item.title)}</ItemTitle>
+                    <ItemSubtitle skeleton={skeleton}>{(item && item.date)}</ItemSubtitle>
                 </TitleContainer>
             </DetailsContainer>
             <ActionsContainer>
-                <ItemTime skeleton={skeleton}>{item && item.duracion_mp3}</ItemTime>
+                <ItemTime skeleton={skeleton}>{item && item.length}</ItemTime>
                 <ButtonGroup>
                     <ButtonPlay handlePlay={handlePlay}/>
                     {downloadButton()}

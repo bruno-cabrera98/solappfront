@@ -1,7 +1,8 @@
 import {AnyAction, createSlice, PayloadAction, ThunkAction} from "@reduxjs/toolkit";
 import {RootState} from "../store";
+import {useSelector} from "react-redux";
 
-const initialState : any[] = []
+const initialState : DownloadAudioItem[] = []
 
 const downloadListSlice = createSlice({
     name: 'downloadList',
@@ -10,7 +11,7 @@ const downloadListSlice = createSlice({
         initialize(state, action) {
             return action.payload
         },
-        addDownloadAudio(state, action : PayloadAction<any>) {
+        addDownloadAudio(state, action : PayloadAction<DownloadAudioItem>) {
             const audio : any = action.payload
             state.push(audio)
         },
@@ -18,10 +19,12 @@ const downloadListSlice = createSlice({
             const id = action.payload
             return state.filter(item => item.id !== id)
         },
-        changeStateAudio(state, action) {
-            const {id, audioState} = action.payload
-            console.log({id, audioState})
-            state.find(audio => audio.id === id).state = audioState
+        changeStateAudio(state, action : PayloadAction<DownloadAudioItem>) {
+            const {id, downloadState} = action.payload
+            console.log({id, downloadState})
+            const audio = state.find(audio => audio.id === id)
+            if (audio)
+                audio.downloadState = downloadState
         }
     }
 })
@@ -48,8 +51,18 @@ export const removeDownloadAudioAction = (id : number) : ThunkAction<void, RootS
     }
 }
 
-export const changeStateAudioAction = (id : number, audioState : any) : ThunkAction<void, RootState, unknown, AnyAction>  => {
+export const changeStateAudioAction = (id : number, downloadState : DownloadState) : ThunkAction<void, RootState, unknown, AnyAction>  => {
     return async (dispatch) => {
-        dispatch(changeStateAudio({id, audioState}))
+        dispatch(changeStateAudio({id, downloadState}))
     }
+}
+
+export const selectDownloadedItem = (id : number | undefined) => (state: RootState) : DownloadState => {
+    if (id) {
+        const audio = state.downloadList.find(audio => audio.id === id)
+        if (audio)
+            return audio.downloadState
+    }
+    return 'notDownloaded'
+
 }

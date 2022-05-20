@@ -1,5 +1,6 @@
 import axios from "axios";
 import {db} from "../db";
+
 const url = process.env.REACT_APP_API_URL || 'https://del-sol-app.herokuapp.com/'
 
 const getAudioSection = async (
@@ -14,9 +15,7 @@ const getAudioSection = async (
                     const contenidos : ApiContenido[] = res.data.records
                     return contenidos.map(
                         contenido => {
-                            const item = contenidoToAudioItem(contenido)
-                            item.downloaded = keys.includes(item.id)
-                            return item
+                            return contenidoToAudioItem(contenido)
                         }
                     )
                 })

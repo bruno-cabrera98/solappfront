@@ -2,7 +2,6 @@ import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import api from '../service/api'
 import {selectSections, setSectionAction} from "../reducers/programsReducer";
-import {useDispatch} from "react-redux";
 import ProgramSection from "../components/ProgramSection";
 import styled from "styled-components";
 import {H1} from "../components/stateless/Atoms/Fonts";
@@ -32,7 +31,7 @@ const ProgramPage = () => {
 
     return program && <div>
         <Title>{program.name}</Title>
-        {sections.map(sec => <ProgramSection
+        {id && sections.map(sec => <ProgramSection
             key={sec.id}
             programId={id}
             sec={sec}

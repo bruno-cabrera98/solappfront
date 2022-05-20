@@ -1,6 +1,6 @@
 import styled, {css} from "styled-components";
 
-const Button = styled.button`
+const Button = styled.button<{greyed?: boolean}>`
   border: none;
   border-radius: 3px;
   font-weight: 700;

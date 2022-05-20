@@ -1,15 +1,17 @@
-import AudioListItem from "./AudioListItem";
+import AudioListItem from "./AudioListItem"
 import styled, {css} from "styled-components";
-import Pager from "./stateless/Pager";
+import Pager from "./stateless/Pager"
 
-import {library} from "@fortawesome/fontawesome-svg-core";
+import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useSelector} from "react-redux";
+import React from "react";
 
 library.add(faAngleDown)
 
-const AudioListExpanderWrapper = styled.div`
+const AngleDownIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angle-down'})
+
+const AudioListExpanderWrapper = styled.div<{expanded:boolean}>`
   margin-left: 5px;
   transition: transform .3s ease-in-out;
   ${({expanded}) => expanded ? css`
@@ -17,10 +19,10 @@ const AudioListExpanderWrapper = styled.div`
   ` : css``}
 `
 
-const AudioListExpander = ({expanded}) => {
+const AudioListExpander = (props : {expanded : boolean})  => {
     return (
-        <AudioListExpanderWrapper expanded={expanded}>
-            <FontAwesomeIcon icon="fa-angle-down" size={"xs"}/>
+        <AudioListExpanderWrapper expanded={props.expanded}>
+            <FontAwesomeIcon icon={AngleDownIcon} size={"xs"}/>
         </AudioListExpanderWrapper>
     )
 }
@@ -37,16 +39,17 @@ const AudioListMenuWrapper = styled.div`
   cursor: pointer;
 `
 
-const AudioListMenu = ({title, expanded, switchExpander}) => {
+const AudioListMenu = (props : {title: string, expanded: boolean, switchExpander: () => void}) => {
+    const {title, expanded, switchExpander} = props
     return (
         <AudioListMenuWrapper onClick={switchExpander}>
             {title}
-            <AudioListExpander expanded={expanded} switchExpander={switchExpander}/>
+            <AudioListExpander expanded={expanded}/>
         </AudioListMenuWrapper>
     )
 }
 
-const AudioListWrapper = styled.div`
+const AudioListWrapper = styled.div<{expanded:boolean, size: number}>`
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -88,6 +91,17 @@ const ExpandAudios = styled.div`
   cursor: pointer;
 `
 
+interface IAudioListProps {
+    items?: AudioItem[]
+    size?: number,
+    title: string,
+    page: number,
+    nextPage: () => void,
+    previousPage: () => void,
+    switchExpander: () => void,
+    expanded: boolean,
+}
+
 const AudioList = (
     {
         items,
@@ -98,7 +112,7 @@ const AudioList = (
         previousPage,
         switchExpander,
         expanded,
-    }) => {
+    }: IAudioListProps) => {
 
     const getListSize = () => {
         if (!expanded)
@@ -107,7 +121,7 @@ const AudioList = (
     }
 
     const emptyList = () => {
-        if (!items || items.length === 0) {
+        if (items === undefined || items.length === 0) {
             return Array.from(Array(getListSize()).keys()).map(
                 item => <AudioListItem key={item} skeleton={true}/>
             )
@@ -117,16 +131,16 @@ const AudioList = (
     return <AudioListWrapper expanded={expanded} size={getListSize()}>
         <AudioListMenu title={title} expanded={expanded} switchExpander={switchExpander}/>
         {
-            emptyList() || items.slice(0, getListSize()).map(
+            emptyList() || (items && items.slice(0, getListSize()).map(
                 item => (
                     <AudioListItem key={item.id} item={item} />
                 )
-            )
+            ))
         }
         {page && expanded && <AudioListPagerWrapper>
             <Pager nextPage={nextPage} previousPage={previousPage} page={page}/>
         </AudioListPagerWrapper>}
-        {expanded === false && <ExpandAudios onClick={switchExpander}>Listar mas audios</ExpandAudios>}
+        {!expanded && <ExpandAudios onClick={switchExpander}>Listar mas audios</ExpandAudios>}
     </AudioListWrapper>
 
 }

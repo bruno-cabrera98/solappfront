@@ -3,6 +3,8 @@ interface Program {
     id: string,
     name: string,
     sections: Section[],
+    icon_url: string,
+    img_url: string
 }
 
 interface ApiPrograma {

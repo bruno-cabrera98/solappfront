@@ -1,8 +1,10 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import React from "react";
 import styled from "styled-components";
+import {findIconDefinition, IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 const PlayIcon = styled.button`
-  font-family: "delsol" !important;
+  font-family: "delsol",serif !important;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;
@@ -30,12 +32,14 @@ const PlayIcon = styled.button`
   cursor: pointer;
 `
 
-const PlayButton = ({handlePlay, playing}) =>
+const FaPauseIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'pause'})
+const FaPLayIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'play'})
+const PlayButton = ({handlePlay, playing} : {handlePlay : React.MouseEventHandler<HTMLButtonElement>, playing: boolean}) =>
     <PlayIcon onClick={handlePlay}>
         {
             playing ?
-                (<FontAwesomeIcon icon="fa-solid fa-pause" size="xs"/>) :
-                (<FontAwesomeIcon icon="fa-solid fa-play" size="xs" style={{marginLeft: '5px'}}/>)
+                (<FontAwesomeIcon icon={FaPauseIcon} size="xs"/>) :
+                (<FontAwesomeIcon icon={FaPLayIcon} size="xs" style={{marginLeft: '5px'}}/>)
         }
     </PlayIcon>
 

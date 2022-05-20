@@ -9,9 +9,9 @@ const skeletonAnimation = keyframes`
   }
 `
 
-const transformUrl = (url) => `https${url.slice(4)}`
+const transformUrl = (url : string) => `https${url.slice(4)}`
 
-const ProgramIcon = styled.div`
+const ProgramIcon = styled.div<{small?: boolean, mini?: boolean, skeleton?: boolean, icon?: string}>`
   height: 40px;
   min-height: 40px;
   width: 40px;
@@ -42,7 +42,7 @@ const ProgramIcon = styled.div`
     animation-iteration-count: infinite;
     animation-timing-function: linear;
   ` : css`
-    background-image: url(${transformUrl(icon) || ''});
+    background-image: url(${(icon && transformUrl(icon)) || ''});
   `}
   display: inline-block;
   

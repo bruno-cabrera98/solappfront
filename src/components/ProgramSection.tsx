@@ -15,10 +15,10 @@ const ProgramSection = (props : {programId : string, sec : Section}) => {
         }
     }, [page, expanded])
 
-    const [audioList, setAudioList] = useState<false | AudioItem[]>(sec.content)
+    const [audioList, setAudioList] = useState<undefined | AudioItem[]>(sec.content)
 
     const getAudios = (section : string, page : number) => {
-        setAudioList(false)
+        setAudioList(undefined)
         service.getAudioSection(programId, section, page).then(
             audios => setAudioList(audios)
         )

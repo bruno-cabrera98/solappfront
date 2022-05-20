@@ -1,13 +1,14 @@
 import styled from "styled-components";
-import {library} from "@fortawesome/fontawesome-svg-core";
+import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {pauseAction, resumeAction, setAudioAction} from "../../reducers/playerReducer";
+import {setAudioAction} from "../../reducers/playerReducer";
 import PlayButton from "./PlayButton";
-import {useDispatch} from "react-redux";
 import ProgramIcon from "./ProgramIcon";
 import ProgramName from "./ProgramName";
 import {H3} from "./Atoms/Fonts";
+import React from "react";
+import {useAppDispatch} from "../../hooks/redux";
 
 library.add(faTrash)
 
@@ -35,29 +36,29 @@ const DeleteButton = styled.button`
   cursor: pointer;
 `
 
-
-const AudioLine = ({item, handleDeleteAudio}) => {
+const FaTrashIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'trash'})
+const AudioLine = ({item, handleDeleteAudio} : {item: AudioItem, handleDeleteAudio: (item : AudioItem) => void}) => {
     console.log(item)
-    const deleteAudio = (event) => {
+    const deleteAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        handleDeleteAudio(item.id)
+        handleDeleteAudio(item)
     }
 
-    const dispatch = useDispatch()
-    const handlePlay = (event) => {
+    const dispatch = useAppDispatch()
+    const handlePlay = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        dispatch(setAudioAction(item.id, item.titulo))
+        dispatch(setAudioAction(item, true))
     }
 
     return (
         <AudioLineContainer>
-            <PlayButton handlePlay={handlePlay}/>
+            <PlayButton handlePlay={handlePlay} playing={false}/>
             <ProgramName>
-                <ProgramIcon icon={item.icon}/>
-                {item.titulo}</ProgramName>
-            <ProgramTime>{item.duracion}</ProgramTime>
+                <ProgramIcon icon={item.icon_url}/>
+                {item.title}</ProgramName>
+            <ProgramTime>{item.length}</ProgramTime>
             <DeleteButton onClick={deleteAudio}>
-                <FontAwesomeIcon icon="fa-solid fa-trash"/>
+                <FontAwesomeIcon icon={FaTrashIcon}/>
             </DeleteButton>
         </AudioLineContainer>
     )

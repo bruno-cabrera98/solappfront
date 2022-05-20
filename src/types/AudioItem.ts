@@ -6,7 +6,13 @@ interface AudioItem {
     length: string,
     title: string,
     img_url: string,
-    downloaded: boolean,
+}
+
+type DownloadState = 'downloading' | 'downloaded' | 'notDownloaded'
+
+interface DownloadAudioItem {
+    id: number,
+    downloadState: DownloadState,
 }
 
 interface ApiContenido {
@@ -49,6 +55,5 @@ function contenidoToAudioItem(contenido : ApiContenido) : AudioItem {
         length: contenido.duracion,
         title: contenido.titulo,
         img_url: contenido.media.img_894x503,
-        downloaded: false,
     }
 }

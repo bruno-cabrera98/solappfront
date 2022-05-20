@@ -1,7 +1,8 @@
-import {library} from "@fortawesome/fontawesome-svg-core";
+import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import styled, { keyframes } from 'styled-components'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import React from "react";
 
 library.add(faSpinner)
 
@@ -23,6 +24,7 @@ const StyledSpinner = styled.span`
   line-height: 0;
 `
 
-const Spinner = () => <StyledSpinner><FontAwesomeIcon icon="fa-solid fa-spinner"/></StyledSpinner>
+const FaSpinnerIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'spinner'})
+const Spinner = () => <StyledSpinner><FontAwesomeIcon icon={FaSpinnerIcon}/></StyledSpinner>
 
 export default Spinner

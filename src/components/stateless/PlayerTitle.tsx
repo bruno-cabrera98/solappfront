@@ -1,9 +1,9 @@
+import React from "react";
 import styled, {keyframes} from "styled-components";
 
 const PlayerTitleWrapper = styled.div`
   width: 100%;
   background-color: #0f031c;
-  width: 100%;
   padding: 4px 0;
   height: 14px;
   box-shadow: 0 10px 5px -10px black;
@@ -19,7 +19,7 @@ const inverseSlidingText = keyframes`
   100% { left: 100%; }
 `
 
-const MovingTitle = styled.div`
+const MovingTitle = styled.div<{inverse?: boolean}>`
   font-weight: 700;
   display: block;
   position: absolute;
@@ -37,7 +37,7 @@ const MovingTitle = styled.div`
   text-align: center;
 `
 
-const PlayerTitle = ({title}) => {
+const PlayerTitle = ({title} : {title: string}) => {
     return <PlayerTitleWrapper>
         <MovingTitle >{title}</MovingTitle>
         <MovingTitle inverse>{title}</MovingTitle>

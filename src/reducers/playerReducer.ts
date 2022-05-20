@@ -73,7 +73,7 @@ interface audioPlayingLocalStorage {
     img_url: string
 }
 
-export const setAudioAction = (item : AudioItem, play : any): ThunkAction<void, RootState, unknown, AnyAction> =>
+export const setAudioAction = (item : AudioItem, play : boolean): ThunkAction<void, RootState, unknown, AnyAction> =>
     async (dispatch) => {
         const {id, img_url} = item
         let url = `${cdnUrl}${id}.mp3`
