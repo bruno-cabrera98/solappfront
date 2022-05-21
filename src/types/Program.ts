@@ -4,7 +4,8 @@ interface Program {
     name: string,
     sections: Section[],
     icon_url: string,
-    img_url: string
+    img_url: string,
+    published: boolean,
 }
 
 interface ApiPrograma {

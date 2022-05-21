@@ -69,3 +69,7 @@ export const selectSections = (programId: string | undefined) => (state: RootSta
     const programs = state.programs && state.programs.find(program => program.id === programId)
     return (programs && programs.sections) || []
 }
+
+export const selectPrograms = () => (state: RootState) => {
+    return state.programs
+}

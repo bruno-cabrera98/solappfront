@@ -10,7 +10,6 @@ import api from "./service/api"
 import {useDispatch} from "react-redux";
 import {initAction} from "./reducers/programsReducer";
 import ProgramPage from "./pages/ProgramPage";
-import SectionAudios from "./pages/SectionAudios";
 import {SideMenu} from "./components/SideMenu";
 import {ContentWrapper, PageContainer} from "./components/stateless/ContentWrapper";
 import theme from './parameters/theme'
@@ -69,7 +68,6 @@ function App() {
                         <Routes>
                             <Route element={<Navigate to="/programs/dar" />} path="/"/>
                             <Route element={<ProgramPage/>} path="/programs/:id"/>
-                            <Route element={<SectionAudios/>} path="/programs/:id/:section"/>
                             <Route element={<DownloadedAudios/>} path="downloads"/>
                         </Routes>
                     </ContentWrapper>

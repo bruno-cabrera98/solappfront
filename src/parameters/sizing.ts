@@ -1,4 +1,4 @@
-const size : any = {
+export const size : any = {
     mobileS: '320px',
     mobileM: '375px',
     mobileL: '425px',

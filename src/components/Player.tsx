@@ -1,4 +1,4 @@
-import {useEffect, useRef } from "react";
+import {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {initializeAction, updateAction} from "../reducers/playerReducer";
 import styled from "styled-components";
@@ -6,6 +6,7 @@ import Slider from "./stateless/Slider";
 import PlayerTitle from "./stateless/PlayerTitle";
 import PlayButton from "./stateless/PlayButton";
 import usePlayer from "../hooks/usePlayer";
+import React from "react";
 
 const PlayerWrapper = styled.div`
   display: flex;
@@ -48,7 +49,7 @@ const SliderWrapper = styled.div`
   flex-grow: 1;
 `
 
-const Timer = ({time, duration}) => {
+const Timer = ({time, duration} : {time: number, duration: number}) => {
     const timeMinutes = String(Math.floor(time / 60)).padStart(2, '0')
     const timeSeconds = String(Math.floor(time % 60)).padStart(2, '0')
     const durationMinutes = String(Math.floor(duration / 60)).padStart(2, '0')
@@ -61,7 +62,7 @@ const Timer = ({time, duration}) => {
 
 const Player = () => {
     const player = usePlayer()
-    const audioRef = useRef()
+    const audioRef = React.createRef<HTMLAudioElement>()
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -96,7 +97,7 @@ const Player = () => {
         }
     }, [player.playing])
 
-    const handlePlay = (event) => {
+    const handlePlay = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         if (player.playing) {
             player.pause()
@@ -105,13 +106,15 @@ const Player = () => {
         }
     }
 
-    const onPlaying = (event) => {
+    const onPlaying = (event : React.ChangeEvent<HTMLAudioElement>) => {
         dispatch(updateAction(event.target.currentTime))
     }
 
-    const onChangeTime = (event) => {
-        audioRef.current.currentTime = event.target.value
-        dispatch(updateAction(event.target.value))
+    const onChangeTime = (event : React.ChangeEvent<HTMLInputElement>) => {
+        if (audioRef && audioRef.current) {
+            audioRef.current.currentTime = event.target.valueAsNumber
+            dispatch(updateAction(event.target.valueAsNumber))
+        }
     }
 
     return player && <PlayerWrapper>
@@ -122,13 +125,14 @@ const Player = () => {
                 <source src={player.playingUrl}/>
             </audio>
             {player && audioRef.current?
-                <><SliderWrapper>
-                    <Slider
-                        max={(audioRef.current && audioRef.current.duration) || 0}
-                        value={player.second}
-                        onChange={onChangeTime}
-                    />
-                </SliderWrapper>
+                <>
+                    <SliderWrapper>
+                        <Slider
+                            max={(audioRef.current && audioRef.current.duration) || 0}
+                            value={player.second}
+                            onChange={onChangeTime}
+                        />
+                    </SliderWrapper>
 
                     <Timer time={player.second} duration={audioRef.current.duration}/>
                 </>

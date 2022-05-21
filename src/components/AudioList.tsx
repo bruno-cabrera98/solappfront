@@ -11,7 +11,7 @@ library.add(faAngleDown)
 
 const AngleDownIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angle-down'})
 
-const AudioListExpanderWrapper = styled.div<{expanded:boolean}>`
+const AudioListExpanderWrapper = styled.div<{expanded?:boolean}>`
   margin-left: 5px;
   transition: transform .3s ease-in-out;
   ${({expanded}) => expanded ? css`
@@ -19,7 +19,7 @@ const AudioListExpanderWrapper = styled.div<{expanded:boolean}>`
   ` : css``}
 `
 
-const AudioListExpander = (props : {expanded : boolean})  => {
+const AudioListExpander = (props : {expanded? : boolean})  => {
     return (
         <AudioListExpanderWrapper expanded={props.expanded}>
             <FontAwesomeIcon icon={AngleDownIcon} size={"xs"}/>
@@ -39,7 +39,7 @@ const AudioListMenuWrapper = styled.div`
   cursor: pointer;
 `
 
-const AudioListMenu = (props : {title: string, expanded: boolean, switchExpander: () => void}) => {
+const AudioListMenu = (props : {title: string, expanded?: boolean, switchExpander: () => void}) => {
     const {title, expanded, switchExpander} = props
     return (
         <AudioListMenuWrapper onClick={switchExpander}>
@@ -49,7 +49,7 @@ const AudioListMenu = (props : {title: string, expanded: boolean, switchExpander
     )
 }
 
-const AudioListWrapper = styled.div<{expanded:boolean, size: number}>`
+const AudioListWrapper = styled.div<{expanded?:boolean, size: number}>`
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -99,7 +99,7 @@ interface IAudioListProps {
     nextPage: () => void,
     previousPage: () => void,
     switchExpander: () => void,
-    expanded: boolean,
+    expanded?: boolean,
 }
 
 const AudioList = (

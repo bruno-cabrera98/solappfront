@@ -1,14 +1,14 @@
 import styled, {css} from "styled-components";
-import {useEffect, useState} from "react";
+import React, {RefCallback, useEffect, useState} from "react";
 import api from "../service/api";
-import {initAction} from "../reducers/programsReducer";
-import {useDispatch, useSelector} from "react-redux";
+import {initAction, selectPrograms} from "../reducers/programsReducer";
 import ProgramIcon from "./stateless/ProgramIcon";
 import {Link} from "react-router-dom";
 import {useMatch} from "react-router";
-import {device, size, sizeInt} from "../parameters/sizing";
+import {sizeInt} from "../parameters/sizing";
 import {useSwipeable} from "react-swipeable";
 import useWindowDimensions from "../hooks/WindowDimensions";
+import {useAppDispatch, useAppSelector} from "../hooks/redux";
 
 const SideMenuWrapper = styled.div`
   flex-direction: column;
@@ -27,13 +27,13 @@ const SideMenuWrapper = styled.div`
   display: flex;
 `
 
-const SideMenuResponsiveWrapper = styled(SideMenuWrapper)`
-  ${({expanded}) => 
-    expanded ? css`
-      margin-left: 0;
-    ` : css `
-      margin-left: -100%;
-    `
+const SideMenuResponsiveWrapper = styled(SideMenuWrapper)<{expanded: boolean}>`
+  ${({expanded}) =>
+          expanded ? css`
+            margin-left: 0;
+          ` : css `
+            margin-left: -100%;
+          `
   }
   z-index: 1000;
   display: block;
@@ -44,13 +44,13 @@ const SideMenuResponsiveWrapper = styled(SideMenuWrapper)`
 
 `
 
-const MenuItemWrapper = styled.div`
+const MenuItemWrapper = styled.div<{active: boolean, mobile?: boolean}>`
   border-radius: 5px;
   margin: 5px 10px;
   padding: 2px;
   display: flex;
   color: white;
-  
+
   font-family: Raleway, sans-serif;
   font-weight: 600;
   align-items: center;
@@ -66,42 +66,45 @@ const MenuItemWrapper = styled.div`
   ` : css`
     font-size: 13px;
   `}
-  
+
 `
 
-const MenuItem = ({program, active, mobile, handleClick}) => {
-
+const MenuItem = ({ program, active, mobile, handleClick} : {
+    program: Program,
+    active: boolean,
+    mobile?: boolean,
+    handleClick?: () => void
+}) => {
     return (
         <Link to={`/programs/${program.id}`} style={{ textDecoration: 'none' }} onClick={handleClick}>
             <MenuItemWrapper mobile={mobile} active={active}>
-                <ProgramIcon icon={program['icon-mini']} mini/>
-                {program.nombre}
+                <ProgramIcon icon={program.icon_url} mini/>
+                {program.name}
             </MenuItemWrapper>
         </Link>
     )
-
 }
 
 const SideMenu = () => {
-    const dispatch = useDispatch()
-    const { height, width } = useWindowDimensions()
-    const programs = useSelector(state => state.programs)
+    const dispatch = useAppDispatch()
+    const { width } = useWindowDimensions()
+    const programs = useAppSelector(selectPrograms())
     let match = useMatch("/programs/:id");
     const [expanded, setExpanded] = useState(false)
 
     const { ref: documentRef } = useSwipeable({
-        onSwipedRight: ({ dir, event }) => {
+        onSwipedRight: () => {
             if (!expanded && width <= sizeInt.mobileL) {
                 setExpanded(true)
             }
         },
-        onSwipedLeft: ({ dir, event }) => {
+        onSwipedLeft: () => {
             if (expanded && width <= sizeInt.mobileL) {
                 setExpanded(false)
             }
         },
-        preventDefaultTouchmoveEvent: true
-    });
+        preventScrollOnSwipe: true
+    }) as { ref: RefCallback<Document> };
     // attach swipeable to document
     useEffect(() => {
         documentRef(document);
@@ -110,9 +113,9 @@ const SideMenu = () => {
     useEffect(() => {
         if (width <= sizeInt.mobileL) {
             if (expanded) {
-                document.body.style['overflow-y'] = "hidden"
+                document.body.style.overflowY = "hidden"
             } else {
-                document.body.style['overflow-y'] = "scroll"
+                document.body.style.overflowY = "scroll"
             }
         }
     }, [expanded])
@@ -124,16 +127,16 @@ const SideMenu = () => {
     }, [])
 
     return width > sizeInt.mobileL ?
-        <SideMenuWrapper expanded={expanded}>
-            {programs && programs.filter(program => program.publicar).map(program => <MenuItem active={match && program.id === match.params.id} program={program} key={program.id}/> )}
+        <SideMenuWrapper>
+            {programs && programs.filter(program => program.published).map(program => <MenuItem active={match != undefined && program.id === match.params.id} program={program} key={program.id}/> )}
         </SideMenuWrapper>
         :
         <SideMenuResponsiveWrapper expanded={expanded}>
             {programs && programs
-                .filter(program => program.publicar)
+                .filter(program => program.published)
                 .map(program =>
                     <MenuItem mobile
-                              active={match && program.id === match.params.id}
+                              active={match != undefined && program.id === match.params.id}
                               program={program}
                               key={program.id}
                               handleClick={() => setExpanded(false)}
