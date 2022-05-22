@@ -1,17 +1,9 @@
 import {AnyAction, createSlice, PayloadAction, ThunkAction} from "@reduxjs/toolkit";
 import {db} from '../db'
-import {AppDispatch, RootState} from "../store";
+import {RootState} from "../store";
+import {PlayerT} from "../types/Player";
 
-const url = 'http://localhost:3001/audio/'
 const cdnUrl = 'https://cdn.dl.uy/solmp3/'
-
-export interface playerStateT {
-    playing : boolean,
-    playingUrl: string,
-    second: number,
-    audioTitle: string,
-    img_url: string,
-}
 
 export interface PlayerAction {
     item?: AudioItem,
@@ -19,12 +11,13 @@ export interface PlayerAction {
     url: string,
 }
 
-const initialState : playerStateT = {
+const initialState : PlayerT = {
     playing: false,
     playingUrl: '',
     second: 0,
     audioTitle: '',
     img_url: '',
+    summary: ''
 }
 
 const playerSlice = createSlice({
@@ -61,7 +54,7 @@ const playerSlice = createSlice({
     }
 })
 
-export const { setAudio, stop, resume, pause, update, initialize } = playerSlice.actions
+const { setAudio, stop, resume, pause, update, initialize } = playerSlice.actions
 
 export default playerSlice.reducer
 

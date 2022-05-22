@@ -2,9 +2,8 @@ import ProgramIcon from "./stateless/ProgramIcon";
 import {Button} from "./stateless/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
-import {faDownload, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {faDownload, faPause, faPlay, faTrashCan} from "@fortawesome/free-solid-svg-icons";
 import {device} from "../parameters/sizing"
-
 import styled, {keyframes, css} from "styled-components";
 import usePlayer from "../hooks/usePlayer";
 import {H1} from "./stateless/Atoms/Fonts";
@@ -13,7 +12,7 @@ import React from "react";
 import {useAppSelector} from "../hooks/redux";
 import {selectDownloadedItem} from "../reducers/downloadListReducer";
 
-library.add(faDownload, faTrashCan)
+library.add(faDownload, faTrashCan, faPlay, faPause)
 
 const DetailsContainer = styled.div`
   display: flex;
@@ -54,7 +53,6 @@ const ItemText = styled(H1)<{skeleton?: boolean }>`
   ${({skeleton}) => skeleton ? css`
     visibility: hidden;
     height: 16px;
-
     :after {
       top: 0;
       visibility: visible;
@@ -81,7 +79,12 @@ const ItemTitle = styled(ItemText)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-
+  :after {
+    ${({skeleton}) => skeleton ? css`
+      position: relative;
+    ` : css``
+    }
+  }
   font-size: 12px;
   @media (${device.tablet}) {
     font-size: 14px;
@@ -98,7 +101,7 @@ const ItemSubtitle = styled(ItemText)`
   @media (${device.tablet}) {
     font-size: 10px;
   }
-  
+
   ${({skeleton}) => skeleton ? css`
     visibility: hidden;
     height: 16px;
@@ -199,7 +202,6 @@ const AudioListItem = ({item, skeleton} : {item?: AudioItem, skeleton?: boolean}
             await player.delete(item)
     }
     const downloadButton = () => {
-
         if (downloadedState === 'notDownloaded') {
             return <ButtonDownload handleDownload={handleDownload}/>
         } else if (downloadedState === 'downloaded') {

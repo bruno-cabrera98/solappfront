@@ -1,13 +1,10 @@
 import Player from "./components/Player";
-import {library} from "@fortawesome/fontawesome-svg-core";
-import {faPlay, faPause} from "@fortawesome/free-solid-svg-icons";
 import {createGlobalStyle, ThemeProvider} from "styled-components";
 import {Navigate, Route, Routes} from "react-router";
 import DownloadedAudios from "./pages/DownloadedAudios";
 import Navbar from "./components/stateless/Navbar";
 import {useEffect} from "react";
 import api from "./service/api"
-import {useDispatch} from "react-redux";
 import {initAction} from "./reducers/programsReducer";
 import ProgramPage from "./pages/ProgramPage";
 import {SideMenu} from "./components/SideMenu";
@@ -17,6 +14,8 @@ import font from "./fonts/raleway.ttf"
 import {db} from "./db";
 import {initializeDownloadListAction} from "./reducers/downloadListReducer";
 import PlayerMenu from "./components/PlayerMenu";
+import React from "react";
+import {useAppDispatch} from "./hooks/redux";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -32,14 +31,11 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-
-library.add(faPlay, faPause)
-
 function App() {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     useEffect(() => {
         api.getProgramas().then(
-            res => dispatch(initAction(res.data.programas))
+            programs => dispatch(initAction(programs))
         )
 
         db.audios.toArray()
@@ -47,10 +43,7 @@ function App() {
                 dispatch(initializeDownloadListAction(audios.map(
                     audio => ({
                             id: audio.id,
-                            titulo: audio.titulo,
-                            duracion: audio.duracion,
-                            icon: audio.icon,
-                            state: 'downloaded'
+                            downloadState: 'downloaded'
                         }
                     )
                 )))

@@ -54,6 +54,7 @@ const PagerPage = styled.div`
   font-weight: 700;
   color:white;
   text-shadow: 0 0 10px #070c13;
+  pointer-events: none;
 `
 
 const FaAnglesRightIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angles-right'})

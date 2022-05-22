@@ -1,16 +1,17 @@
 import styled, {css} from "styled-components";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import usePlayer from "../hooks/usePlayer";
 import {H3} from "./stateless/Atoms/Fonts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {library} from "@fortawesome/fontawesome-svg-core";
+import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
 import {faAnglesDown, faAnglesUp, faForward, faBackward} from "@fortawesome/free-solid-svg-icons";
+import React from "react";
 
 library.add(faAnglesUp, faAnglesDown, faForward, faBackward)
 
-const transformUrl = (url) => `https${url.slice(4)}`
+const transformUrl = (url : string) => `https${url.slice(4)}`
 
-const PlayerMenuInfoWrapper = styled.div`
+const PlayerMenuInfoWrapper = styled.div<{img_url: string}>`
   background-size: 100%;
   background-repeat: no-repeat;
   background-image: url(${props => props.img_url ? transformUrl(props.img_url) : ''});
@@ -28,7 +29,7 @@ const PlayerMenuActionsWrapper = styled.div`
   width: 100%;
 `
 
-const PlayerMenuWrapper = styled.div`
+const PlayerMenuWrapper = styled.div<{open: boolean}>`
   display: flex;
   flex-direction: column;
   width: 600px;
@@ -84,46 +85,47 @@ const ButtonTimeChangeWrapper = styled.button`
   }
 `
 
+const FaBackwardIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'backward'})
 const ButtonBackward = () => {
     return (
         <ButtonTimeChangeWrapper>
-            <FontAwesomeIcon icon="fa-solid fa-backward" />
+            <FontAwesomeIcon icon={FaBackwardIcon} />
         </ButtonTimeChangeWrapper>
     )
 }
 
+const FaForwardIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'forward'})
 const ButtonForward = () => {
     return (
         <ButtonTimeChangeWrapper>
-            <FontAwesomeIcon icon="fa-solid fa-forward" />
+            <FontAwesomeIcon icon={FaForwardIcon} />
         </ButtonTimeChangeWrapper>
     )
 }
 
-const ExpandButton = ({handleClick, children}) => {
-
+const ExpandButton = ({handleClick, children} : {handleClick: React.MouseEventHandler<HTMLButtonElement>, children : React.ReactNode}) => {
     return (
         <ExpandButtonWrapper onClick={handleClick}>
             {children}
         </ExpandButtonWrapper>
     )
-
 }
 
+const FaAnglesUpIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angles-up'})
 const PlayerMenu = () => {
     const [open, setOpen] = useState(true)
     const player = usePlayer()
 
     return <PlayerMenuWrapper open={open}>
         <ExpandButton handleClick={() => setOpen(!open)}>
-            <FontAwesomeIcon icon="fa-solid fa-angles-up" />
+            <FontAwesomeIcon icon={FaAnglesUpIcon} />
         </ExpandButton>
 
         <PlayerMenuInfoWrapper img_url={player.img_url}>
             <PlayerMenuTitle>
                 {player.audioTitle}
             </PlayerMenuTitle>
-            {player.resumen}
+            {player.summary}
         </PlayerMenuInfoWrapper>
 
         <PlayerMenuActionsWrapper>

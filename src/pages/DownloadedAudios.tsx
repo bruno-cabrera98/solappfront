@@ -2,36 +2,31 @@ import {useEffect, useState} from "react";
 import {db} from "../db";
 import AudioList from "../components/AudioList";
 import usePlayer from "../hooks/usePlayer";
+import React from "react";
 
 
 const DownloadedAudios = () => {
-    const [downloads, setDownloads] = useState([])
-
-    const player = usePlayer()
+    const [downloads, setDownloads] = useState<AudioItem[]>([])
 
     useEffect(() => {
         db.audios.toArray().then(
             items => setDownloads(items.map(item =>
             ({
-                ...item,
-                programa : {
-                    icon: item.icon
-                },
-
+                id: item.id,
+                title: item.title,
+                length: item.length,
+                icon_url: item.icon_url,
+                date: 'arreglar',
+                img_url: 'arreglar',
             })))
         )
     }, [])
-
-    const handleDeleteAudio = (item) => {
-        player.delete(item)
-        setDownloads(downloads.filter(audio => audio.id !== item.id))
-    }
 
     return (
         <AudioList
             items={downloads}
             title={'Descargas'}
-            page={false}
+            page={1}
             expanded={true}
         />
     )

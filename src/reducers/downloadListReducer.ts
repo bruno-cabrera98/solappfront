@@ -1,6 +1,5 @@
 import {AnyAction, createSlice, PayloadAction, ThunkAction} from "@reduxjs/toolkit";
 import {RootState} from "../store";
-import {useSelector} from "react-redux";
 
 const initialState : DownloadAudioItem[] = []
 
@@ -12,7 +11,7 @@ const downloadListSlice = createSlice({
             return action.payload
         },
         addDownloadAudio(state, action : PayloadAction<DownloadAudioItem>) {
-            const audio : any = action.payload
+            const audio = action.payload
             state.push(audio)
         },
         removeDownloadAudio(state, action) {
@@ -21,7 +20,6 @@ const downloadListSlice = createSlice({
         },
         changeStateAudio(state, action : PayloadAction<DownloadAudioItem>) {
             const {id, downloadState} = action.payload
-            console.log({id, downloadState})
             const audio = state.find(audio => audio.id === id)
             if (audio)
                 audio.downloadState = downloadState
@@ -33,13 +31,13 @@ const { initialize, addDownloadAudio, changeStateAudio, removeDownloadAudio } = 
 
 export default downloadListSlice.reducer
 
-export const initializeDownloadListAction = (audioList : any) : ThunkAction<void, RootState, unknown, AnyAction>  => {
+export const initializeDownloadListAction = (audioList : DownloadAudioItem[]) : ThunkAction<void, RootState, unknown, AnyAction>  => {
     return async (dispatch) => {
         dispatch(initialize(audioList))
     }
 }
 
-export const addDownloadAudioAction = (audio : any) : ThunkAction<void, RootState, unknown, AnyAction>  => {
+export const addDownloadAudioAction = (audio : DownloadAudioItem) : ThunkAction<void, RootState, unknown, AnyAction>  => {
     return async (dispatch) => {
         dispatch(addDownloadAudio(audio))
     }

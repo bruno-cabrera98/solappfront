@@ -38,7 +38,6 @@ const DeleteButton = styled.button`
 
 const FaTrashIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'trash'})
 const AudioLine = ({item, handleDeleteAudio} : {item: AudioItem, handleDeleteAudio: (item : AudioItem) => void}) => {
-    console.log(item)
     const deleteAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         handleDeleteAudio(item)

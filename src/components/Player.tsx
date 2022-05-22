@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {useDispatch} from "react-redux";
 import {initializeAction, updateAction} from "../reducers/playerReducer";
 import styled from "styled-components";
@@ -7,6 +7,9 @@ import PlayerTitle from "./stateless/PlayerTitle";
 import PlayButton from "./stateless/PlayButton";
 import usePlayer from "../hooks/usePlayer";
 import React from "react";
+import {library} from "@fortawesome/fontawesome-svg-core";
+import {faDownload, faPause, faPlay, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+library.add(faDownload, faTrashCan, faPlay, faPause)
 
 const PlayerWrapper = styled.div`
   display: flex;
@@ -62,7 +65,7 @@ const Timer = ({time, duration} : {time: number, duration: number}) => {
 
 const Player = () => {
     const player = usePlayer()
-    const audioRef = React.createRef<HTMLAudioElement>()
+    const audioRef = useRef<HTMLAudioElement>(null)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -124,7 +127,7 @@ const Player = () => {
             <audio ref={audioRef} onTimeUpdate={onPlaying}>
                 <source src={player.playingUrl}/>
             </audio>
-            {player && audioRef.current?
+            {(player && audioRef.current)?
                 <>
                     <SliderWrapper>
                         <Slider

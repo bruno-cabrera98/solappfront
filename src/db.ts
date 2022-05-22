@@ -12,7 +12,7 @@ class AppDb extends Dexie {
 }
 
 export interface IAudio {
-    id?: number,
+    id: number,
     blob: any,
     title: string,
     length: string,

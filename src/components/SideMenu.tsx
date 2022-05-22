@@ -122,7 +122,7 @@ const SideMenu = () => {
 
     useEffect(() => {
         api.getProgramas().then(
-            res => dispatch(initAction(res.data.programas))
+            programs => dispatch(initAction(programs))
         )
     }, [])
 

@@ -22,14 +22,14 @@ const ProgramPage = () => {
     useEffect(() => {
         if (id) {
             api.getProgram(id)
-                .then(res => {
-                    setProgram(res.data.record)
-                    dispatch(setSectionAction(id, res.data.secciones))
+                .then(program => {
+                    setProgram(program)
+                    dispatch(setSectionAction(id, program.sections))
                 })
         }
     }, [id])
 
-    return program && <div>
+    return program ? <div>
         <Title>{program.name}</Title>
         {id && sections.map(sec => <ProgramSection
             key={sec.id}
@@ -37,7 +37,8 @@ const ProgramPage = () => {
             sec={sec}
         />)}
         <footer style={{height: '100px'}}></footer>
-    </div>
+    </div> :
+        <div></div>
 
 }
 

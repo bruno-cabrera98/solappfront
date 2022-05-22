@@ -39,7 +39,7 @@ const AudioListMenuWrapper = styled.div`
   cursor: pointer;
 `
 
-const AudioListMenu = (props : {title: string, expanded?: boolean, switchExpander: () => void}) => {
+const AudioListMenu = (props : {title: string, expanded?: boolean, switchExpander?: () => void}) => {
     const {title, expanded, switchExpander} = props
     return (
         <AudioListMenuWrapper onClick={switchExpander}>
@@ -96,9 +96,9 @@ interface IAudioListProps {
     size?: number,
     title: string,
     page: number,
-    nextPage: () => void,
-    previousPage: () => void,
-    switchExpander: () => void,
+    nextPage?: () => void,
+    previousPage?: () => void,
+    switchExpander?: () => void,
     expanded?: boolean,
 }
 
@@ -137,7 +137,7 @@ const AudioList = (
                 )
             ))
         }
-        {page && expanded && <AudioListPagerWrapper>
+        {page && expanded && nextPage && previousPage && <AudioListPagerWrapper>
             <Pager nextPage={nextPage} previousPage={previousPage} page={page}/>
         </AudioListPagerWrapper>}
         {!expanded && <ExpandAudios onClick={switchExpander}>Listar mas audios</ExpandAudios>}

@@ -29,7 +29,7 @@ interface ApiContenido {
     fechaEmision_dmy: string,
     url_programa_id: string
     url_subprograma_id: string
-    programa: ApiPrograma,
+    programa: ApiProgramaItem,
     seccion: ApiSeccion,
     media: {
         titulo: string,

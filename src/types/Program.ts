@@ -8,7 +8,7 @@ interface Program {
     published: boolean,
 }
 
-interface ApiPrograma {
+interface ApiProgramaItem {
     id: string,
     nombre: string,
     img_360: string,
@@ -27,4 +27,9 @@ interface ApiPrograma {
     telefono: string,
     whatsapp: string,
     correo: string
+}
+
+interface ApiPrograma {
+    record: ApiProgramaItem,
+    secciones: ApiSeccion[]
 }

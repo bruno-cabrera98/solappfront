@@ -1,6 +1,6 @@
-import {useDispatch, useSelector} from "react-redux";
-import {pauseAction, playerStateT, resumeAction, selectPlayer, setAudioAction} from "../reducers/playerReducer";
-import {db, IAudio} from "../db"
+import {useDispatch} from "react-redux";
+import {pauseAction, resumeAction, selectPlayer, setAudioAction} from "../reducers/playerReducer";
+import {db} from "../db"
 import service from "../service/api"
 import {
     addDownloadAudioAction,
@@ -8,8 +8,9 @@ import {
     removeDownloadAudioAction
 } from "../reducers/downloadListReducer";
 import {useAppSelector} from "./redux";
+import {Player} from "../types/Player";
 
-const usePlayer = () => {
+const usePlayer = () : Player => {
     const dispatch = useDispatch()
     const player = useAppSelector(selectPlayer)
     return {
@@ -27,7 +28,7 @@ const usePlayer = () => {
             const {id} = item
             let audioBlob = await db.audios.get(id)
             if (!audioBlob) {
-                dispatch(addDownloadAudioAction({...item, state: 'downloading'}))
+                dispatch(addDownloadAudioAction({...item, downloadState: 'downloading'}))
                 const res = await service.getAudio(id)
                 audioBlob = res.data
                 if (audioBlob) {

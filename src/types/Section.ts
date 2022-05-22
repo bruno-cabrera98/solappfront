@@ -1,5 +1,4 @@
 
-
 interface Section {
     id: string,
     name: string,
@@ -10,4 +9,5 @@ interface ApiSeccion {
     id: string,
     nombre: string,
     orden: number,
+    contenido: ApiContenido
 }
