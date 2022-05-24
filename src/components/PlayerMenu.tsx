@@ -1,22 +1,23 @@
-import styled, {css} from "styled-components";
-import {useState} from "react";
-import usePlayer from "../hooks/usePlayer";
-import {H3} from "./stateless/Atoms/Fonts";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
-import {faAnglesDown, faAnglesUp, faForward, faBackward} from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import styled, { css } from 'styled-components';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { findIconDefinition, IconDefinition, library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faAnglesDown, faAnglesUp, faForward, faBackward,
+} from '@fortawesome/free-solid-svg-icons';
+import { H3 } from './stateless/Atoms/Fonts';
+import usePlayer from '../hooks/usePlayer';
 
-library.add(faAnglesUp, faAnglesDown, faForward, faBackward)
+library.add(faAnglesUp, faAnglesDown, faForward, faBackward);
 
-const transformUrl = (url : string) => `https${url.slice(4)}`
+const transformUrl = (url: string) => `https${url.slice(4)}`;
 
-const PlayerMenuInfoWrapper = styled.div<{img_url: string}>`
+const PlayerMenuInfoWrapper = styled.div<{ img_url: string }>`
   background-size: 100%;
   background-repeat: no-repeat;
-  background-image: url(${props => props.img_url ? transformUrl(props.img_url) : ''});
+  background-image: url(${(props) => (props.img_url ? transformUrl(props.img_url) : '')});
   flex-grow: 1;
-`
+`;
 
 const PlayerMenuActionsWrapper = styled.div`
   display: flex;
@@ -27,9 +28,9 @@ const PlayerMenuActionsWrapper = styled.div`
   bottom: 0;
   height: 60px;
   width: 100%;
-`
+`;
 
-const PlayerMenuWrapper = styled.div<{open: boolean}>`
+const PlayerMenuWrapper = styled.div<{ open: boolean }>`
   display: flex;
   flex-direction: column;
   width: 600px;
@@ -43,17 +44,17 @@ const PlayerMenuWrapper = styled.div<{open: boolean}>`
   background-color: #08010f;
   transition: bottom .2s linear;
   box-sizing: border-box;
-  ${props => props.open ? css`
+  ${(props) => (props.open ? css`
     bottom: 88px;
   ` : css`
     bottom: -312px;
-  `}
-`
+  `)}
+`;
 
 const PlayerMenuTitle = styled(H3)`
-  color: ${props => props.theme.fontWhite};
+  color: ${(props) => props.theme.fontWhite};
   margin: 10px;
-`
+`;
 
 const ExpandButtonWrapper = styled.button`
   display: block;
@@ -69,7 +70,7 @@ const ExpandButtonWrapper = styled.button`
   transform: translateX(-50%);
   color: white;
   cursor: pointer;
-`
+`;
 
 const ButtonTimeChangeWrapper = styled.button`
   border: solid 1px #28044f;
@@ -83,57 +84,61 @@ const ButtonTimeChangeWrapper = styled.button`
   :hover{
     background-color: #28044f;
   }
-`
+`;
 
-const FaBackwardIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'backward'})
-const ButtonBackward = () => {
-    return (
-        <ButtonTimeChangeWrapper>
-            <FontAwesomeIcon icon={FaBackwardIcon} />
-        </ButtonTimeChangeWrapper>
-    )
+const FaBackwardIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'backward' });
+function ButtonBackward() {
+  return (
+    <ButtonTimeChangeWrapper>
+      <FontAwesomeIcon icon={FaBackwardIcon} />
+    </ButtonTimeChangeWrapper>
+  );
 }
 
-const FaForwardIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'forward'})
-const ButtonForward = () => {
-    return (
-        <ButtonTimeChangeWrapper>
-            <FontAwesomeIcon icon={FaForwardIcon} />
-        </ButtonTimeChangeWrapper>
-    )
+const FaForwardIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'forward' });
+function ButtonForward() {
+  return (
+    <ButtonTimeChangeWrapper>
+      <FontAwesomeIcon icon={FaForwardIcon} />
+    </ButtonTimeChangeWrapper>
+  );
 }
 
-const ExpandButton = ({handleClick, children} : {handleClick: React.MouseEventHandler<HTMLButtonElement>, children : React.ReactNode}) => {
-    return (
-        <ExpandButtonWrapper onClick={handleClick}>
-            {children}
-        </ExpandButtonWrapper>
-    )
+function ExpandButton({
+  handleClick,
+  children,
+}: { handleClick: React.MouseEventHandler<HTMLButtonElement>, children: React.ReactNode }) {
+  return (
+    <ExpandButtonWrapper onClick={handleClick}>
+      {children}
+    </ExpandButtonWrapper>
+  );
 }
 
-const FaAnglesUpIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angles-up'})
-const PlayerMenu = () => {
-    const [open, setOpen] = useState(true)
-    const player = usePlayer()
+const FaAnglesUpIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'angles-up' });
+function PlayerMenu() {
+  const [open, setOpen] = useState(true);
+  const player = usePlayer();
 
-    return <PlayerMenuWrapper open={open}>
-        <ExpandButton handleClick={() => setOpen(!open)}>
-            <FontAwesomeIcon icon={FaAnglesUpIcon} />
-        </ExpandButton>
+  return (
+    <PlayerMenuWrapper open={open}>
+      <ExpandButton handleClick={() => setOpen(!open)}>
+        <FontAwesomeIcon icon={FaAnglesUpIcon} />
+      </ExpandButton>
 
-        <PlayerMenuInfoWrapper img_url={player.img_url}>
-            <PlayerMenuTitle>
-                {player.audioTitle}
-            </PlayerMenuTitle>
-            {player.summary}
-        </PlayerMenuInfoWrapper>
+      <PlayerMenuInfoWrapper img_url={player.img_url}>
+        <PlayerMenuTitle>
+          {player.audioTitle}
+        </PlayerMenuTitle>
+        {player.summary}
+      </PlayerMenuInfoWrapper>
 
-        <PlayerMenuActionsWrapper>
-            <ButtonBackward/>
-            <ButtonForward/>
+      <PlayerMenuActionsWrapper>
+        <ButtonBackward />
+        <ButtonForward />
 
-        </PlayerMenuActionsWrapper>
+      </PlayerMenuActionsWrapper>
     </PlayerMenuWrapper>
-
+  );
 }
-export default PlayerMenu
+export default PlayerMenu;

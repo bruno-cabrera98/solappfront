@@ -1,6 +1,7 @@
+import { IAudioItem } from './IAudioItem';
 
 export interface PlayerT {
-    playing : boolean,
+    playing: boolean,
     playingUrl: string,
     second: number,
     audioTitle: string,
@@ -9,9 +10,13 @@ export interface PlayerT {
 }
 
 export interface Player extends PlayerT {
-    play(item : AudioItem) : void,
-    resume() : void,
+    play(item: IAudioItem): void,
+
+    resume(): void,
+
     pause(): void,
-    download(item : AudioItem) : void,
-    delete(item : AudioItem) : void,
+
+    download(item: IAudioItem): void,
+
+    delete(item: IAudioItem): void,
 }

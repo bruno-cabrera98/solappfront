@@ -1,6 +1,6 @@
-import React from "react";
-import {Link} from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const NavBarItem = styled(Link)`
   text-decoration: none;
@@ -20,7 +20,7 @@ const NavBarItem = styled(Link)`
   :active {
     background: rgba(255, 255, 255, 0.2);
   }
-`
+`;
 
 const NavContainer = styled.nav`
   background: #08010f;
@@ -31,21 +31,20 @@ const NavContainer = styled.nav`
   left: 0;
   z-index: 2;
   display: flex;
-`
+`;
 
-const Navbar = () => {
+function Navbar() {
+  return (
+    <NavContainer>
+      <NavBarItem to="/">
+        Home
+      </NavBarItem>
+      <NavBarItem to="/downloads">
+        Downloads
+      </NavBarItem>
+    </NavContainer>
 
-    return (
-        <NavContainer>
-            <NavBarItem to="/">
-                Home
-            </NavBarItem>
-            <NavBarItem to="/downloads">
-                Downloads
-            </NavBarItem>
-        </NavContainer>
-
-    )
+  );
 }
 
-export default Navbar
+export default Navbar;

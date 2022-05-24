@@ -1,39 +1,42 @@
-import ProgramIcon from "./stateless/ProgramIcon";
-import {Button} from "./stateless/Button";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
-import {faDownload, faPause, faPlay, faTrashCan} from "@fortawesome/free-solid-svg-icons";
-import {device} from "../parameters/sizing"
-import styled, {keyframes, css} from "styled-components";
-import usePlayer from "../hooks/usePlayer";
-import {H1} from "./stateless/Atoms/Fonts";
-import Spinner from "./stateless/Spinner";
-import React from "react";
-import {useAppSelector} from "../hooks/redux";
-import {selectDownloadedItem} from "../reducers/downloadListReducer";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { findIconDefinition, IconDefinition, library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faDownload, faPause, faPlay, faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
+import styled, { keyframes, css } from 'styled-components';
+import React from 'react';
+import ProgramIcon from './stateless/ProgramIcon';
+import { Button } from './stateless/Button';
+import { device } from '../parameters/sizing';
+import usePlayer from '../hooks/usePlayer';
+import { H1 } from './stateless/Atoms/Fonts';
+import Spinner from './stateless/Spinner';
+import { useAppSelector } from '../hooks/redux';
+import { selectDownloadedItem } from '../reducers/downloadListReducer';
+import { IAudioItem } from '../types/IAudioItem';
 
-library.add(faDownload, faTrashCan, faPlay, faPause)
+library.add(faDownload, faTrashCan, faPlay, faPause);
 
 const DetailsContainer = styled.div`
   display: flex;
   align-items: center;
   min-width: 0;
   padding-right: 10px;
-`
+`;
 
 const ItemWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   min-height: 60px;
   min-width: 0;
-`
+`;
 
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 5px;
   min-width: 0;
-`
+`;
 
 const skeletonAnimation = keyframes`
   from {
@@ -42,15 +45,15 @@ const skeletonAnimation = keyframes`
   to {
     opacity: 100%;
   }
-`
+`;
 
-const ItemText = styled(H1)<{skeleton?: boolean }>`
+const ItemText = styled(H1)<{ skeleton?: boolean }>`
   margin: 0 0;
-  color: ${props => props.theme.fontWhite};
+  color: ${(props) => props.theme.fontWhite};
   font-size: 12px;
   position: relative;
   min-width: 0;
-  ${({skeleton}) => skeleton ? css`
+  ${({ skeleton }) => (skeleton ? css`
     visibility: hidden;
     height: 16px;
     :after {
@@ -71,25 +74,25 @@ const ItemText = styled(H1)<{skeleton?: boolean }>`
       animation-iteration-count: infinite;
       animation-timing-function: linear;
     }
-  ` : css``
-  }
-`
+  ` : css``)
+}
+`;
 
 const ItemTitle = styled(ItemText)`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   :after {
-    ${({skeleton}) => skeleton ? css`
+    ${({ skeleton }) => (skeleton ? css`
       position: relative;
-    ` : css``
-    }
+    ` : css``)
+}
   }
   font-size: 12px;
   @media (${device.tablet}) {
     font-size: 14px;
   }
-`
+`;
 
 const ItemSubtitle = styled(ItemText)`
   font-family: Raleway, sans-serif;
@@ -102,7 +105,7 @@ const ItemSubtitle = styled(ItemText)`
     font-size: 10px;
   }
 
-  ${({skeleton}) => skeleton ? css`
+  ${({ skeleton }) => (skeleton ? css`
     visibility: hidden;
     height: 16px;
     :after {
@@ -110,13 +113,13 @@ const ItemSubtitle = styled(ItemText)`
       height: 8px;
       width: 150px;
     }
-  ` : css``
-  }
-`
+  ` : css``)
+}
+`;
 
 const ItemTime = styled(ItemText)`
   margin-right: 10px;
-  ${({skeleton}) => skeleton ? css`
+  ${({ skeleton }) => (skeleton ? css`
     visibility: hidden;
     height: 16px;
     :after {
@@ -125,39 +128,55 @@ const ItemTime = styled(ItemText)`
       width: 40px;
       left: -37px;
     }
-  ` : css``
-  }
-`
+  ` : css``)
+}
+`;
 
 const ActionsContainer = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
-const FaPlayIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'play'})
-const ButtonPlay = ({handlePlay} : {handlePlay: React.MouseEventHandler<HTMLButtonElement> | undefined}) => (
+const FaPlayIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'play' });
+function ButtonPlay(
+  { handlePlay }: { handlePlay: React.MouseEventHandler<HTMLButtonElement> | undefined },
+) {
+  return (
     <Button onClick={handlePlay}>
-        <FontAwesomeIcon icon={FaPlayIcon} />
+      <FontAwesomeIcon icon={FaPlayIcon} />
     </Button>
-)
+  );
+}
 
-const FaDownloadIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'download'})
-const ButtonDownload = ({handleDownload} : {handleDownload: React.MouseEventHandler<HTMLButtonElement> | undefined}) => (
+const FaDownloadIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'download' });
+function ButtonDownload(
+  { handleDownload }: { handleDownload: React.MouseEventHandler<HTMLButtonElement> | undefined },
+) {
+  return (
     <Button onClick={handleDownload}>
-        <FontAwesomeIcon icon={FaDownloadIcon} />
+      <FontAwesomeIcon icon={FaDownloadIcon} />
     </Button>
-)
+  );
+}
 
-const FaTrashCanIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'trash-can'})
-const ButtonDelete = ({handleDelete} : {handleDelete: React.MouseEventHandler<HTMLButtonElement> | undefined}) => (
+const FaTrashCanIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'trash-can' });
+function ButtonDelete(
+  { handleDelete }: { handleDelete: React.MouseEventHandler<HTMLButtonElement> | undefined },
+) {
+  return (
     <Button onClick={handleDelete}>
-        <FontAwesomeIcon icon={FaTrashCanIcon} />
+      <FontAwesomeIcon icon={FaTrashCanIcon} />
     </Button>
-)
+  );
+}
 
-const ButtonSpinner = () => <Button greyed>
-    <Spinner/>
-</Button>
+function ButtonSpinner() {
+  return (
+    <Button greyed>
+      <Spinner />
+    </Button>
+  );
+}
 
 const ButtonGroup = styled.div`
   ${Button} {
@@ -175,59 +194,55 @@ const ButtonGroup = styled.div`
   height: fit-content;
   display: flex;
   align-items: center;
-`
+`;
 
-const AudioListItem = ({item, skeleton} : {item?: AudioItem, skeleton?: boolean}) => {
-    const icon = item && item.icon_url
+function AudioListItem({ item, skeleton }: { item?: IAudioItem, skeleton?: boolean }) {
+  const icon = item && item.iconUrl;
 
-    const downloadedState = useAppSelector(selectDownloadedItem(item && item.id))
+  const downloadedState = useAppSelector(selectDownloadedItem(item && item.id));
 
-    const player = usePlayer()
+  const player = usePlayer();
 
-    const handlePlay = (event : React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-        if (item)
-            player.play(item)
-    }
+  const handlePlay = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (item) player.play(item);
+  };
 
-    const handleDownload = async (event : React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-        if (item)
-            await player.download(item)
-    }
+  const handleDownload = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (item) await player.download(item);
+  };
 
-    const handleDelete = async (event : React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-        if (item)
-            await player.delete(item)
-    }
-    const downloadButton = () => {
-        if (downloadedState === 'notDownloaded') {
-            return <ButtonDownload handleDownload={handleDownload}/>
-        } else if (downloadedState === 'downloaded') {
-            return <ButtonDelete handleDelete={handleDelete} />
-        } else return  <ButtonSpinner/>
+  const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (item) await player.delete(item);
+  };
+  const downloadButton = () => {
+    if (downloadedState === 'notDownloaded') {
+      return <ButtonDownload handleDownload={handleDownload} />;
+    } if (downloadedState === 'downloaded') {
+      return <ButtonDelete handleDelete={handleDelete} />;
+    } return <ButtonSpinner />;
+  };
 
-    }
-
-    return (
-        <ItemWrapper>
-            <DetailsContainer>
-                <ProgramIcon icon={icon} skeleton={skeleton} small/>
-                <TitleContainer>
-                    <ItemTitle skeleton={skeleton}>{(item && item.title)}</ItemTitle>
-                    <ItemSubtitle skeleton={skeleton}>{(item && item.date)}</ItemSubtitle>
-                </TitleContainer>
-            </DetailsContainer>
-            <ActionsContainer>
-                <ItemTime skeleton={skeleton}>{item && item.length}</ItemTime>
-                <ButtonGroup>
-                    <ButtonPlay handlePlay={handlePlay}/>
-                    {downloadButton()}
-                </ButtonGroup>
-            </ActionsContainer>
-        </ItemWrapper>
-    )
+  return (
+    <ItemWrapper>
+      <DetailsContainer>
+        <ProgramIcon icon={icon} skeleton={skeleton} small />
+        <TitleContainer>
+          <ItemTitle skeleton={skeleton}>{(item && item.title)}</ItemTitle>
+          <ItemSubtitle skeleton={skeleton}>{(item && item.date)}</ItemSubtitle>
+        </TitleContainer>
+      </DetailsContainer>
+      <ActionsContainer>
+        <ItemTime skeleton={skeleton}>{item && item.length}</ItemTime>
+        <ButtonGroup>
+          <ButtonPlay handlePlay={handlePlay} />
+          {downloadButton()}
+        </ButtonGroup>
+      </ActionsContainer>
+    </ItemWrapper>
+  );
 }
 
-export default AudioListItem
+export default AudioListItem;

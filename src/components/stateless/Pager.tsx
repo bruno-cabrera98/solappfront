@@ -1,18 +1,17 @@
-import styled from "styled-components";
-import {findIconDefinition, IconDefinition, library} from "@fortawesome/fontawesome-svg-core";
+import styled from 'styled-components';
+import { findIconDefinition, IconDefinition, library } from '@fortawesome/fontawesome-svg-core';
 
-import {faAnglesLeft, faAnglesRight} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import React from "react";
+import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
 
-library.add(faAnglesLeft, faAnglesRight)
+library.add(faAnglesLeft, faAnglesRight);
 
 const PagerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
-
+`;
 
 const PagerWrapper = styled.div`
   display: flex;
@@ -20,7 +19,7 @@ const PagerWrapper = styled.div`
   border-radius: 10px;
   background-image: linear-gradient(67deg,#e8154a 0%,#e87630 45%,#e8d615 100%);
   overflow: hidden;
-`
+`;
 
 const PagerButton = styled.button`
   background: transparent;
@@ -41,7 +40,7 @@ const PagerButton = styled.button`
   :active {
     background: rgba(0,0,0,.4);
   }
-`
+`;
 
 const PagerPage = styled.div`
   background: transparent;
@@ -55,36 +54,36 @@ const PagerPage = styled.div`
   color:white;
   text-shadow: 0 0 10px #070c13;
   pointer-events: none;
-`
+`;
 
-const FaAnglesRightIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angles-right'})
-const FaAnglesLeftIcon: IconDefinition = findIconDefinition({prefix: "fas", iconName: 'angles-left'})
-const Pager = ({page, nextPage, previousPage} : {page: number, nextPage: () => void, previousPage: () => void}) => {
-    const handlePreviousPage = async (event : React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-        previousPage()
-    }
+const FaAnglesRightIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'angles-right' });
+const FaAnglesLeftIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'angles-left' });
+function Pager({ page, nextPage, previousPage }: { page: number, nextPage: () => void, previousPage: () => void }) {
+  const handlePreviousPage = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    previousPage();
+  };
 
-    const handleNextPage = async (event : React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-        nextPage()
-    }
+  const handleNextPage = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    nextPage();
+  };
 
-    return (
-        <PagerContainer>
-            <PagerWrapper>
-                <PagerButton onClick={handlePreviousPage}>
-                    <FontAwesomeIcon icon={FaAnglesLeftIcon} size="sm"/>
-                </PagerButton>
-                <PagerPage>
-                    {page}
-                </PagerPage>
-                <PagerButton onClick={handleNextPage}>
-                    <FontAwesomeIcon icon={FaAnglesRightIcon} size="xs"/>
-                </PagerButton>
-            </PagerWrapper>
-        </PagerContainer>
-    )
+  return (
+    <PagerContainer>
+      <PagerWrapper>
+        <PagerButton onClick={handlePreviousPage}>
+          <FontAwesomeIcon icon={FaAnglesLeftIcon} size="sm" />
+        </PagerButton>
+        <PagerPage>
+          {page}
+        </PagerPage>
+        <PagerButton onClick={handleNextPage}>
+          <FontAwesomeIcon icon={FaAnglesRightIcon} size="xs" />
+        </PagerButton>
+      </PagerWrapper>
+    </PagerContainer>
+  );
 }
 
-export default Pager
+export default Pager;

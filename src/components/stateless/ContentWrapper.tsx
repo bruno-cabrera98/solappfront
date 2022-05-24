@@ -1,5 +1,4 @@
-import styled from "styled-components";
-
+import styled from 'styled-components';
 
 const ContentWrapper = styled.div`
   width: 100%;
@@ -7,11 +6,11 @@ const ContentWrapper = styled.div`
   padding: 10px;
   box-sizing: border-box;
   min-width: 0;
-`
+`;
 
 const PageContainer = styled.div`
   display: flex;
   height: auto;
-`
+`;
 
-export {ContentWrapper, PageContainer}
+export { ContentWrapper, PageContainer };

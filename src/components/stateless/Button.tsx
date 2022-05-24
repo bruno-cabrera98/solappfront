@@ -1,6 +1,6 @@
-import styled, {css} from "styled-components";
+import styled, { css } from 'styled-components';
 
-const Button = styled.button<{greyed?: boolean}>`
+const Button = styled.button<{ greyed?: boolean }>`
   border: none;
   border-radius: 3px;
   font-weight: 700;
@@ -12,8 +12,8 @@ const Button = styled.button<{greyed?: boolean}>`
   display: inline-block;
   height: 40px;
   width: 40px;
-  margin: 10px 0px 0px 10px;
-  padding: 0px 10px 0px 10px;
+  margin: 10px 0 0 10px;
+  padding: 0 10px 0 10px;
   background: #e86215;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -21,9 +21,9 @@ const Button = styled.button<{greyed?: boolean}>`
     background-image: -moz-linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
     background-image: -webkit-linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
     background-image: -ms-linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
-    box-shadow: 0px 0px 15px rgba(0,0,0,0.71);
+    box-shadow: 0 0 15px rgba(0,0,0,0.71);
   }
-  ${props => props.greyed ? css`
+  ${(props) => (props.greyed ? css`
     background: #7d4f32;
 
     cursor: auto;
@@ -32,11 +32,11 @@ const Button = styled.button<{greyed?: boolean}>`
       background-image: none;
 
     }
-  ` : css``}
-`
+  ` : css``)}
+`;
 
 const RoundButton = styled.button`
-  font-family: "delsol" !important;
+  font-family: "delsol",serif !important;
   font-style: normal !important;
   font-weight: normal !important;
   font-variant: normal !important;
@@ -61,6 +61,6 @@ const RoundButton = styled.button`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.56);
   border: none;
   cursor: pointer;
-`
+`;
 
-export {RoundButton, Button}
+export { RoundButton, Button };

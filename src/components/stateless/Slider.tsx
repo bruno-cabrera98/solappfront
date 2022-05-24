@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Slider = styled.input.attrs({ type: 'range' })`
   display: flex;
@@ -51,6 +51,6 @@ const Slider = styled.input.attrs({ type: 'range' })`
     background: linear-gradient(67deg, #e8154a 0%, #e87630 45%, #e8d615 100%);
     cursor: pointer;
   }
-`
+`;
 
-export default Slider
+export default Slider;
