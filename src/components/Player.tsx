@@ -10,6 +10,7 @@ import Slider from './stateless/Slider';
 import PlayerTitle from './stateless/PlayerTitle';
 import PlayButton from './stateless/PlayButton';
 import usePlayer from '../hooks/usePlayer';
+import {useAppDispatch} from "../hooks/redux";
 
 library.add(faDownload, faTrashCan, faPlay, faPause);
 
@@ -77,7 +78,7 @@ function Timer({ time, duration }: { time: number, duration: number }) {
 function Player() {
   const player = usePlayer();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(initializeAction());

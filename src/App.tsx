@@ -1,5 +1,6 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { Navigate, Route, Routes } from 'react-router';
+import { Route } from 'react-router';
+import { Navigate, Routes } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import Player from './components/Player';
 import DownloadedAudios from './pages/DownloadedAudios';
@@ -11,7 +12,7 @@ import SideMenu from './components/SideMenu';
 import { ContentWrapper, PageContainer } from './components/stateless/ContentWrapper';
 import theme from './parameters/theme';
 import font from './fonts/raleway.ttf';
-import { db } from './db';
+import {db, IAudio} from './db';
 import { initializeDownloadListAction } from './reducers/downloadListReducer';
 import PlayerMenu from './components/PlayerMenu';
 import { useAppDispatch } from './hooks/redux';
@@ -34,40 +35,40 @@ function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
     api.getProgramas().then(
-      (programs) => dispatch(initAction(programs)),
+        (programs) => dispatch(initAction(programs)),
     );
 
     db.audios.toArray()
-      .then((audios) => {
-        dispatch(initializeDownloadListAction(audios.map(
-          (audio) => ({
-            id: audio.id,
-            downloadState: 'downloaded',
-          }
-          ),
-        )));
-      });
+        .then((audios : IAudio[]) => {
+          dispatch(initializeDownloadListAction(audios.map(
+              (audio : IAudio) => ({
+                    id: audio.id,
+                    downloadState: 'downloaded',
+                  }
+              ),
+          )));
+        });
   }, []);
 
   return (
-    <div className="App">
-      <GlobalStyle />
-      <ThemeProvider theme={theme}>
-        <Navbar />
-        <PageContainer>
-          <SideMenu />
-          <ContentWrapper>
-            <Routes>
-              <Route element={<Navigate to="/programs/dar" />} path="/" />
-              <Route element={<ProgramPage />} path="/programs/:id" />
-              <Route element={<DownloadedAudios />} path="downloads" />
-            </Routes>
-          </ContentWrapper>
-        </PageContainer>
-        <PlayerMenu />
-        <Player />
-      </ThemeProvider>
-    </div>
+      <div className="App">
+        <GlobalStyle />
+        <ThemeProvider theme={theme}>
+          <Navbar />
+          <PageContainer>
+            <SideMenu />
+            <ContentWrapper>
+              <Routes>
+                <Route element={<Navigate to="/programs/dar" />} path="/" />
+                <Route element={<ProgramPage />} path="/programs/:id" />
+                <Route element={<DownloadedAudios />} path="downloads" />
+              </Routes>
+            </ContentWrapper>
+          </PageContainer>
+          <PlayerMenu />
+          <Player />
+        </ThemeProvider>
+      </div>
   );
 }
 

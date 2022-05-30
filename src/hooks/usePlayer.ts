@@ -9,12 +9,12 @@ import {
   changeStateAudioAction,
   removeDownloadAudioAction,
 } from '../reducers/downloadListReducer';
-import { useAppSelector } from './redux';
+import {useAppDispatch, useAppSelector} from './redux';
 import { Player } from '../types/Player';
 import { IAudioItem } from '../types/IAudioItem';
 
 const usePlayer = (): Player => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const player = useAppSelector(selectPlayer);
   return {
     ...player,

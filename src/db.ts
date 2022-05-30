@@ -1,6 +1,15 @@
 import Dexie from 'dexie';
 import { IAudioItem } from './types/IAudioItem';
 
+export interface IAudio extends IAudioItem{
+    id: number,
+    blob: any,
+    title: string,
+    length: string,
+    iconUrl: string,
+    imgUrl: string
+}
+
 class AppDb extends Dexie {
   audios!: Dexie.Table<IAudio, number>;
 
@@ -10,15 +19,6 @@ class AppDb extends Dexie {
       audios: '++id, blob, title, length, iconUrl, imgUrl',
     });
   }
-}
-
-export interface IAudio extends IAudioItem{
-    id: number,
-    blob: any,
-    title: string,
-    length: string,
-    iconUrl: string,
-    imgUrl: string
 }
 
 export const db = new AppDb();
