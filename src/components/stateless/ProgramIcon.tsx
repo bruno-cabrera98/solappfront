@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import {transformUrl} from "../../utils/utils";
 
 const skeletonAnimation = keyframes`
   from {
@@ -8,8 +9,6 @@ const skeletonAnimation = keyframes`
     opacity: 100%;
   }
 `;
-
-const transformUrl = (url: string) => `https${url.slice(4)}`;
 
 const ProgramIcon = styled.div<{ small?: boolean, mini?: boolean, skeleton?: boolean, icon?: string }>`
   height: 40px;

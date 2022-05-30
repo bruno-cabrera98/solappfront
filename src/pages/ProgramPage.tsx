@@ -7,6 +7,7 @@ import ProgramSection from '../components/ProgramSection';
 import { H1 } from '../components/stateless/Atoms/Fonts';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { IProgram } from '../types/IProgram';
+import {transformUrl} from "../utils/utils";
 
 const ProgramBannerWrapper = styled.div`
   position: absolute;
@@ -38,7 +39,7 @@ function ProgramBanner({ program } : {program: IProgram}) {
   return (
     <ProgramBannerWrapper>
       <ImgBannerCover />
-      <ImgBanner src={program.img_url} />
+      <ImgBanner src={transformUrl(program.img_url)} />
     </ProgramBannerWrapper>
   );
 }

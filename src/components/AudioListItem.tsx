@@ -98,7 +98,7 @@ const ItemSubtitle = styled(ItemText)`
   font-family: Raleway, sans-serif;
   color: white;
   margin: 0 0;
-
+  
   font-size: 8px;
 
   @media (${device.tablet}) {

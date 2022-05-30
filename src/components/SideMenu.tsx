@@ -6,13 +6,14 @@ import { useSwipeable } from 'react-swipeable';
 import api from '../service/api';
 import { initAction, selectPrograms } from '../reducers/programsReducer';
 import ProgramIcon from './stateless/ProgramIcon';
-import { sizeInt } from '../parameters/sizing';
+import {device, sizeInt} from '../parameters/sizing';
 import useWindowDimensions from '../hooks/WindowDimensions';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { IProgram } from '../types/IProgram';
 
 const SideMenuWrapper = styled.div`
   flex-direction: column;
+  min-width: 250px;
   width: 250px;
   background: #0f031c;
   height: calc(100vh - 60px);
@@ -23,7 +24,6 @@ const SideMenuWrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.purple};
   border-left: 1px solid ${(props) => props.theme.purple};
   overflow: auto;
-  min-width: 250px;
   box-sizing: border-box;
   display: flex;
 `;

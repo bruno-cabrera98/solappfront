@@ -7,6 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { H3 } from './stateless/Atoms/Fonts';
 import usePlayer from '../hooks/usePlayer';
+import {device} from "../parameters/sizing";
 
 library.add(faAnglesUp, faAnglesDown, faForward, faBackward);
 
@@ -33,8 +34,9 @@ const PlayerMenuActionsWrapper = styled.div`
 const PlayerMenuWrapper = styled.div<{ open: boolean }>`
   display: flex;
   flex-direction: column;
-  width: 600px;
+  width: 100%;
   height: 400px;
+  max-width: 600px;
   position: fixed;
   bottom: 88px;
   left: 50%;
@@ -49,6 +51,10 @@ const PlayerMenuWrapper = styled.div<{ open: boolean }>`
   ` : css`
     bottom: -312px;
   `)}
+
+  @media (${device.tablet}) {
+    width: 600px;
+  }
 `;
 
 const PlayerMenuTitle = styled(H3)`
@@ -117,7 +123,7 @@ function ExpandButton({
 
 const FaAnglesUpIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'angles-up' });
 function PlayerMenu() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const player = usePlayer();
 
   return (
