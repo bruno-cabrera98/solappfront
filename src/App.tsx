@@ -2,7 +2,7 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Route } from 'react-router';
 import { Navigate, Routes } from 'react-router-dom';
 import React, { useEffect } from 'react';
-import Player from './components/Player';
+import PlayerComponent from './components/PlayerComponent';
 import DownloadedAudios from './pages/DownloadedAudios';
 import Navbar from './components/stateless/Navbar';
 import api from './service/api';
@@ -16,6 +16,7 @@ import {db, IAudio} from './db';
 import { initializeDownloadListAction } from './reducers/downloadListReducer';
 import PlayerMenu from './components/PlayerMenu';
 import { useAppDispatch } from './hooks/redux';
+import AboutPage from "./pages/AboutPage";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -62,11 +63,12 @@ function App() {
                 <Route element={<Navigate to="/programs/dar" />} path="/" />
                 <Route element={<ProgramPage />} path="/programs/:id" />
                 <Route element={<DownloadedAudios />} path="downloads" />
+                <Route element={<AboutPage />} path="about" />
               </Routes>
             </ContentWrapper>
           </PageContainer>
           <PlayerMenu />
-          <Player />
+          <PlayerComponent />
         </ThemeProvider>
       </div>
   );

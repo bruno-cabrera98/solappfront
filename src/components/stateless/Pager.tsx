@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import { findIconDefinition, IconDefinition, library } from '@fortawesome/fontawesome-svg-core';
 
 import { faAnglesLeft, faAnglesRight } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +17,7 @@ const PagerWrapper = styled.div`
   display: flex;
   width: auto;
   border-radius: 10px;
-  background-image: linear-gradient(67deg,#e8154a 0%,#e87630 45%,#e8d615 100%);
+  background-image: ${props => props.theme.solGradient};
   overflow: hidden;
 `;
 
@@ -29,16 +29,16 @@ const PagerButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: ${(props) => props.theme.white };
   font-size: 20px;
   border: none;
   cursor: pointer;
-  text-shadow: 0 0 10px #070c13;
+  text-shadow: 0 0 10px ${props => props.theme.black};
   :hover {
-    background: rgba(0,0,0,.2);
+    background: ${props => props.theme.transparentOverlay200};
   }
   :active {
-    background: rgba(0,0,0,.4);
+    background: ${props => props.theme.transparentOverlay400};
   }
 `;
 
@@ -51,8 +51,8 @@ const PagerPage = styled.div`
   line-height: 20px;
   font-family: Raleway, sans-serif;
   font-weight: 700;
-  color:white;
-  text-shadow: 0 0 10px #070c13;
+  color: ${props => props.theme.white };
+  text-shadow: 0 0 10px ${props => props.theme.black };
   pointer-events: none;
 `;
 

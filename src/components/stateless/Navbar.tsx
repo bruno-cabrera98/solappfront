@@ -34,17 +34,20 @@ const NavContainer = styled.nav`
 `;
 
 function Navbar() {
-  return (
-    <NavContainer>
-      <NavBarItem to="/">
-        Home
-      </NavBarItem>
-      <NavBarItem to="/downloads">
-        Downloads
-      </NavBarItem>
-    </NavContainer>
+    return (
+        <NavContainer>
+            <NavBarItem to="/">
+                Inicio
+            </NavBarItem>
+            <NavBarItem to="/downloads">
+                Descargas
+            </NavBarItem>
+            <NavBarItem to="/about">
+                Sobre Página
+            </NavBarItem>
+        </NavContainer>
 
-  );
+    );
 }
 
 export default Navbar;

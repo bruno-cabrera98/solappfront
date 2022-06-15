@@ -15,7 +15,7 @@ const SideMenuWrapper = styled.div`
   flex-direction: column;
   min-width: 250px;
   width: 250px;
-  background: #0f031c;
+  background: ${props => props.theme.darkPurple};
   height: calc(100vh - 60px);
   position: sticky;
   z-index: 1;

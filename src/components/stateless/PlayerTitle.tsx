@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 
 const PlayerTitleWrapper = styled.div`
   width: 100%;
-  background-color: #0f031c;
+  background-color: ${props => props.theme.darkPurple};
   padding: 4px 0;
   height: 14px;
   box-shadow: 0 10px 5px -10px black;

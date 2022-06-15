@@ -1,4 +1,4 @@
-import { ApiSeccion, ISection, Section } from './ISection';
+import {ApiSeccion, apiSectionToSection, ISection} from './ISection';
 
 export interface IProgram {
     id: string,
@@ -9,32 +9,21 @@ export interface IProgram {
     published: boolean,
 }
 
-export class Program implements IProgram {
-  id: string;
-
-  name: string;
-
-  sections: ISection[];
-
-  icon_url: string;
-
-  img_url: string;
-
-  published: boolean;
-
-  constructor(apiProgramaItem: ApiProgramaItem) {
-    this.id = apiProgramaItem.id;
-    this.name = apiProgramaItem.nombre;
-    this.sections = [];
-    this.icon_url = apiProgramaItem.icon;
-    this.img_url = apiProgramaItem.img_894;
-    this.published = apiProgramaItem.publicar;
-  }
+export function ApiProgramaItemToProgram(apiProgramaItem: ApiProgramaItem) : IProgram {
+    const program : IProgram = {
+        id: apiProgramaItem.id,
+        name: apiProgramaItem.nombre,
+        sections: [],
+        icon_url: apiProgramaItem.icon,
+        img_url: apiProgramaItem.img_894,
+        published: apiProgramaItem.publicar,
+    }
+    return program
 }
 
 export function ProgramFromApiProgram(apiProgram: ApiPrograma) {
-  const program: IProgram = new Program(apiProgram.record);
-  program.sections = apiProgram.secciones.map((sec) => new Section(sec));
+  const program: IProgram = ApiProgramaItemToProgram(apiProgram.record);
+  program.sections = apiProgram.secciones.map((sec) => apiSectionToSection(sec));
   return program;
 }
 

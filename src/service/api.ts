@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { ApiContenido, AudioItem, IAudioItem } from '../types/IAudioItem';
+import {ApiContenido, apiContenidoToAudioItem, IAudioItem} from '../types/IAudioItem';
 import {
-  ApiPrograma, ApiProgramaItem, IProgram, Program, ProgramFromApiProgram,
+    ApiPrograma, ApiProgramaItem, ApiProgramaItemToProgram, IProgram, ProgramFromApiProgram,
 } from '../types/IProgram';
 
 const url = process.env.REACT_APP_API_URL || 'https://del-sol-app.herokuapp.com/';
@@ -15,7 +15,7 @@ const getAudioSection = async (
     (res) => {
       const contenidos: ApiContenido[] = res.data.records;
       return contenidos.map(
-        (contenido) => new AudioItem(contenido),
+        (contenido) => apiContenidoToAudioItem(contenido),
       );
     },
   );
@@ -27,7 +27,7 @@ const getAudio = async (id: number) => axios.get(`${url}audio/${id}`, {
 const getProgramas = async (): Promise<IProgram[]> => axios.get(`${url}programas`).then(
   (res) => {
     const apiPrograms: ApiProgramaItem[] = res.data.programas;
-    return apiPrograms.map((apiProgram) => new Program(apiProgram));
+    return apiPrograms.map((apiProgram) => ApiProgramaItemToProgram(apiProgram));
   },
 );
 

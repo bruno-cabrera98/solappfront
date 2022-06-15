@@ -69,3 +69,7 @@ export const selectDownloadedItem = (
   }
   return 'notDownloaded';
 };
+
+export const selectDownloadedItemList = () => (state: RootState): DownloadAudioItem[] => {
+  return state.downloadList
+};

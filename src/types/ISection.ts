@@ -1,4 +1,4 @@
-import { ApiContenido, AudioItem, IAudioItem } from './IAudioItem';
+import {ApiContenido, apiContenidoToAudioItem, IAudioItem} from './IAudioItem';
 
 export interface ISection {
     id: string,
@@ -6,23 +6,17 @@ export interface ISection {
     content: IAudioItem[]
 }
 
-export class Section implements ISection {
-  id: string;
-
-  name: string;
-
-  content: IAudioItem[];
-
-  constructor(apiSeccion: ApiSeccion) {
-    this.id = apiSeccion.id;
-    this.name = apiSeccion.nombre;
-    this.content = [new AudioItem(apiSeccion.contenido)];
-  }
-}
-
 export interface ApiSeccion {
     id: string,
     nombre: string,
     orden: number,
     contenido: ApiContenido
+}
+
+export function apiSectionToSection(apiSeccion: ApiSeccion) : ISection {
+    return {
+        id: apiSeccion.id,
+        name: apiSeccion.nombre,
+        content: [apiContenidoToAudioItem(apiSeccion.contenido)],
+    }
 }

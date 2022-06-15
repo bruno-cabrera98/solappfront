@@ -7,10 +7,25 @@ import React from 'react';
 import Pager from './stateless/Pager';
 import AudioListItem from './AudioListItem';
 import { IAudioItem } from '../types/IAudioItem';
+import { H3 } from './stateless/Atoms/Fonts'
 
 library.add(faAngleDown);
 
 const AngleDownIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'angle-down' });
+
+const EmptyListMessageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+`
+
+const EmptyListMessage = () => <EmptyListMessageWrapper>
+    <H3 dark={false}>
+        No hay audios en la lista
+    </H3>
+</EmptyListMessageWrapper>
 
 const AudioListExpanderWrapper = styled.div<{ expanded?: boolean }>`
   margin-left: 5px;
@@ -21,11 +36,11 @@ const AudioListExpanderWrapper = styled.div<{ expanded?: boolean }>`
 `;
 
 function AudioListExpander({ expanded }: { expanded?: boolean }) {
-  return (
-    <AudioListExpanderWrapper expanded={expanded}>
-      <FontAwesomeIcon icon={AngleDownIcon} size="xs" />
-    </AudioListExpanderWrapper>
-  );
+    return (
+        <AudioListExpanderWrapper expanded={expanded}>
+            <FontAwesomeIcon icon={AngleDownIcon} size="xs" />
+        </AudioListExpanderWrapper>
+    );
 }
 
 const AudioListMenuWrapper = styled.div`
@@ -41,13 +56,13 @@ const AudioListMenuWrapper = styled.div`
 `;
 
 function AudioListMenu(props: { title: string, expanded?: boolean, switchExpander?: () => void }) {
-  const { title, expanded, switchExpander } = props;
-  return (
-    <AudioListMenuWrapper onClick={switchExpander}>
-      {title}
-      <AudioListExpander expanded={expanded} />
-    </AudioListMenuWrapper>
-  );
+    const { title, expanded, switchExpander } = props;
+    return (
+        <AudioListMenuWrapper onClick={switchExpander}>
+            {title}
+            {switchExpander && <AudioListExpander expanded={expanded}/>}
+        </AudioListMenuWrapper>
+    );
 }
 
 const AudioListWrapper = styled.div<{ expanded?: boolean, size: number }>`
@@ -68,10 +83,13 @@ const AudioListWrapper = styled.div<{ expanded?: boolean, size: number }>`
         height: 100px;
       `;
     }
-
-    return css`
+    if (size === 0) {
+      return css`height: auto`
+    } else {
+      return css`
         height: ${20 + size * 60}px;
       `;
+    }
   }}
 `;
 
@@ -104,46 +122,51 @@ interface IAudioListProps {
 }
 
 function AudioList({
-  items,
-  size = 10,
-  title,
-  page,
-  nextPage,
-  previousPage,
-  switchExpander,
-  expanded,
-}: IAudioListProps) {
-  const getListSize = () => {
-    if (!expanded) return 1;
-    return (items && items.length) || size;
-  };
+                       items,
+                       size = 10,
+                       title,
+                       page,
+                       nextPage,
+                       previousPage,
+                       switchExpander,
+                       expanded,
+                   }: IAudioListProps) {
+    const getListSize = () => {
+        if (!expanded) return 1;
+        if (items) return items.length
+        return size;
+    };
 
-  const emptyList = () => {
-    if (items === undefined || items.length === 0) {
-      return Array.from(Array(getListSize()).keys()).map(
-        (item) => <AudioListItem key={item} skeleton />,
-      );
-    } return false;
-  };
+    const emptyList = () => {
+        if (items === undefined) { // Return skeleton
+            return Array.from(Array(getListSize()).keys()).map(
+                (item) => <AudioListItem key={item} skeleton />,
+            );
+        } else if ( items.length === 0 ) {
+            return <EmptyListMessage/>
 
-  return (
-    <AudioListWrapper expanded={expanded} size={getListSize()}>
-      <AudioListMenu title={title} expanded={expanded} switchExpander={switchExpander} />
-      {
-            emptyList() || (items && items.slice(0, getListSize()).map(
-              (item) => (
-                <AudioListItem key={item.id} item={item} />
-              ),
-            ))
         }
-      {page && expanded && nextPage && previousPage && (
-      <AudioListPagerWrapper>
-        <Pager nextPage={nextPage} previousPage={previousPage} page={page} />
-      </AudioListPagerWrapper>
-      )}
-      {!expanded && <ExpandAudios onClick={switchExpander}>Listar mas audios</ExpandAudios>}
-    </AudioListWrapper>
-  );
+        return false;
+    };
+
+    return (
+        <AudioListWrapper expanded={expanded} size={getListSize()}>
+            <AudioListMenu title={title} expanded={expanded} switchExpander={switchExpander} />
+            {
+                emptyList() || (items && items.slice(0, getListSize()).map(
+                    (item) => (
+                        <AudioListItem key={item.id} item={item} />
+                    ),
+                ))
+            }
+            {page && expanded && nextPage && previousPage && (
+                <AudioListPagerWrapper>
+                    <Pager nextPage={nextPage} previousPage={previousPage} page={page} />
+                </AudioListPagerWrapper>
+            )}
+            {!expanded && <ExpandAudios onClick={switchExpander}>Listar mas audios</ExpandAudios>}
+        </AudioListWrapper>
+    );
 }
 
 export default AudioList;

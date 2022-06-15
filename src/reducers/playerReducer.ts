@@ -5,22 +5,21 @@ import { db } from '../db';
 import { RootState } from '../store';
 import { PlayerT } from '../types/Player';
 import { IAudioItem } from '../types/IAudioItem';
+import {IProgram} from "../types/IProgram";
 
 const cdnUrl = 'https://cdn.dl.uy/solmp3/';
 
 export interface PlayerAction {
-    item?: IAudioItem,
-    play: boolean,
-    url: string,
+  item?: IAudioItem,
+  play: boolean,
+  url: string,
 }
 
 const initialState: PlayerT = {
   playing: false,
   playingUrl: '',
   second: 0,
-  audioTitle: '',
-  img_url: '',
-  summary: '',
+  item: undefined,
 };
 
 const playerSlice = createSlice({
@@ -33,8 +32,7 @@ const playerSlice = createSlice({
       state.playingUrl = url;
       state.second = 0;
       if (item) {
-        state.audioTitle = item.title;
-        state.img_url = item.imgUrl;
+        state.item = item;
       }
       return state;
     },
@@ -51,8 +49,14 @@ const playerSlice = createSlice({
       state.second = action.payload;
       return state;
     },
-    initialize(state, action) {
-      return action.payload;
+    initialize(state, action: PayloadAction<audioPlayingLocalStorage>) {
+      const player = action.payload
+      return {
+        playing: player.playing,
+        playingUrl: player.url,
+        second: player.second,
+        item: player.item,
+      }
     },
   },
 });
@@ -64,18 +68,18 @@ const {
 export default playerSlice.reducer;
 
 interface audioPlayingLocalStorage {
-    second: number,
-    type: 'url',
-    url: string,
-    playing: boolean,
-    imgUrl: string
+  second: number,
+  type: 'url' | 'downloaded',
+  url: string,
+  playing: boolean,
+  item: IAudioItem,
 }
 
 export const setAudioAction = (
-  item: IAudioItem,
-  play: boolean,
+    item: IAudioItem,
+    play: boolean,
 ): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
-  const { id, imgUrl } = item;
+  const { id } = item;
   let url = `${cdnUrl}${id}.mp3`;
   const audioBlob = await db.audios.get(id);
   if (audioBlob) url = URL.createObjectURL(audioBlob.blob);
@@ -83,17 +87,17 @@ export const setAudioAction = (
   dispatch(setAudio({ url, play, item }));
 
   const audioPlaying: audioPlayingLocalStorage = {
+    item,
     type: 'url',
     url,
     second: 0,
     playing: play,
-    imgUrl,
   };
   localStorage.setItem('audioPlaying', JSON.stringify(audioPlaying));
 };
 
 export const resumeAction = (): ThunkAction<void, RootState, unknown, AnyAction> => async (
-  dispatch,
+    dispatch,
 ) => {
   dispatch(resume());
   const audioPlayingString = localStorage.getItem('audioPlaying');
@@ -108,7 +112,7 @@ export const resumeAction = (): ThunkAction<void, RootState, unknown, AnyAction>
 };
 
 export const pauseAction = (): ThunkAction<void, RootState, unknown, AnyAction> => async (
-  dispatch,
+    dispatch,
 ) => {
   dispatch(pause());
   const audioPlayingString = localStorage.getItem('audioPlaying');
@@ -123,7 +127,7 @@ export const pauseAction = (): ThunkAction<void, RootState, unknown, AnyAction> 
 };
 
 export const updateAction = (
-  second: number,
+    second: number,
 ): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
   dispatch(update(second));
   const audioPlayingString = localStorage.getItem('audioPlaying');
@@ -138,15 +142,12 @@ export const updateAction = (
 };
 
 export const initializeAction = (): ThunkAction<void, RootState, unknown, AnyAction> => async (
-  dispatch,
+    dispatch,
 ) => {
   const audioPlayingString = localStorage.getItem('audioPlaying');
   if (audioPlayingString) {
-    const audioPlaying = JSON.parse(audioPlayingString);
-    dispatch(initialize({
-      playingUrl: audioPlaying.url,
-      second: audioPlaying.second,
-    }));
+    const audioPlaying : audioPlayingLocalStorage = JSON.parse(audioPlayingString);
+    dispatch(initialize(audioPlaying));
   }
 };
 

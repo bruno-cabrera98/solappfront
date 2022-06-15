@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
-const defaultText = css`
-  color: ${(props) => props.theme.fontBlack};
+const defaultText = css<{ dark?: boolean }>`
+  color: ${(props) => props.dark ? props.theme.fontBlack : props.theme.fontWhite};
   font-family: Raleway, sans-serif;
 `;
 
@@ -28,3 +28,7 @@ export const H5 = styled.h5`
 export const H6 = styled.h6`
   ${defaultText}
 `;
+
+export const P = styled.p`
+  ${defaultText}
+`

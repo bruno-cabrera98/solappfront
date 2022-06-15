@@ -13,7 +13,7 @@ library.add(faAnglesUp, faAnglesDown, faForward, faBackward);
 
 const transformUrl = (url: string) => `https${url.slice(4)}`;
 
-const PlayerMenuInfoWrapper = styled.div<{ img_url: string }>`
+const PlayerMenuInfoWrapper = styled.div<{ img_url?: string }>`
   background-size: 100%;
   background-repeat: no-repeat;
   background-image: url(${(props) => (props.img_url ? transformUrl(props.img_url) : '')});
@@ -24,7 +24,7 @@ const PlayerMenuActionsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #0f031c;
+  background-color: ${props => props.theme.darkPurple};
   position: relative;
   bottom: 0;
   height: 60px;
@@ -42,7 +42,7 @@ const PlayerMenuWrapper = styled.div<{ open: boolean }>`
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
-  border: solid 1px #28044f;
+  border: solid 1px ${props => props.theme.purple};
   background-color: #08010f;
   transition: bottom .2s linear;
   box-sizing: border-box;
@@ -67,7 +67,7 @@ const ExpandButtonWrapper = styled.button`
   height: 26px;
   width: 100%;
   border-radius: 5px 5px 0 0;
-  background-color: #28044f;
+  background-color: ${props => props.theme.purple};
   position: absolute;
   top:-26px;
   margin: auto;
@@ -79,7 +79,7 @@ const ExpandButtonWrapper = styled.button`
 `;
 
 const ButtonTimeChangeWrapper = styled.button`
-  border: solid 1px #28044f;
+  border: solid 1px ${props => props.theme.purple};
   border-radius: 100%;
   background: none;
   padding: 10px;
@@ -88,7 +88,7 @@ const ButtonTimeChangeWrapper = styled.button`
   color: white;
   cursor: pointer;
   :hover{
-    background-color: #28044f;
+    background-color: ${props => props.theme.purple};
   }
 `;
 
@@ -132,11 +132,11 @@ function PlayerMenu() {
         <FontAwesomeIcon icon={FaAnglesUpIcon} />
       </ExpandButton>
 
-      <PlayerMenuInfoWrapper img_url={player.img_url}>
+      <PlayerMenuInfoWrapper img_url={player.item?.imgUrl}>
         <PlayerMenuTitle>
-          {player.audioTitle}
+          {player.item?.title}
         </PlayerMenuTitle>
-        {player.summary}
+        {player.item?.summary}
       </PlayerMenuInfoWrapper>
 
       <PlayerMenuActionsWrapper>

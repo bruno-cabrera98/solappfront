@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {SyntheticEvent, useEffect, useRef} from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -11,6 +11,7 @@ import PlayerTitle from './stateless/PlayerTitle';
 import PlayButton from './stateless/PlayButton';
 import usePlayer from '../hooks/usePlayer';
 import {useAppDispatch} from "../hooks/redux";
+import {Player} from "../types/Player";
 
 library.add(faDownload, faTrashCan, faPlay, faPause);
 
@@ -75,26 +76,29 @@ function Timer({ time, duration }: { time: number, duration: number }) {
   );
 }
 
-function Player() {
-  const player = usePlayer();
+function PlayerComponent() {
+  const player : Player = usePlayer();
   const audioRef = useRef<HTMLAudioElement>(null);
+  const sourceRef = useRef<HTMLSourceElement>(null)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(initializeAction());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (player.playingUrl && audioRef.current) {
+    if (audioRef.current && sourceRef.current) {
+      sourceRef.current.src = player.playingUrl
       audioRef.current.pause();
       audioRef.current.load();
+      audioRef.current.currentTime = player.second
       if (player.playing) {
-        audioRef.current.play();
+        audioRef.current.play().catch(err => console.log(err));
       } else {
         audioRef.current.pause();
       }
     }
-  }, [player.playingUrl]);
+  }, [player.playingUrl]); // TODO: Fix
 
   useEffect(() => {
     if (player.playingUrl && audioRef.current && !player.playing) {
@@ -134,11 +138,11 @@ function Player() {
 
   return player && (
   <PlayerWrapper>
-    <PlayerTitle title={player.audioTitle} />
+    <PlayerTitle title={player.item?.title || ''} />
     <InnerPlayerWrapper>
       <PlayButton handlePlay={handlePlay} playing={player.playing} />
-      <audio ref={audioRef} onTimeUpdate={onPlaying}>
-        <source src={player.playingUrl} />
+      <audio ref={audioRef} onTimeUpdate={onPlaying} preload="metadata">
+        <source ref={sourceRef} src={player.playingUrl} />
       </audio>
       {(player && audioRef.current)
         ? (
@@ -161,4 +165,4 @@ function Player() {
   );
 }
 
-export default Player;
+export default PlayerComponent;

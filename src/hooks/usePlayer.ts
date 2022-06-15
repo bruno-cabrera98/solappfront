@@ -44,6 +44,7 @@ const usePlayer = (): Player => {
             date: item.date,
             iconUrl: item.iconUrl,
             imgUrl: item.imgUrl,
+            summary: item.summary
           }, id);
         }
       }

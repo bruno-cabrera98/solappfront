@@ -7,7 +7,8 @@ export interface IAudio extends IAudioItem{
     title: string,
     length: string,
     iconUrl: string,
-    imgUrl: string
+    imgUrl: string,
+    date: string,
 }
 
 class AppDb extends Dexie {
@@ -16,7 +17,7 @@ class AppDb extends Dexie {
   constructor() {
     super('AppDb');
     this.version(1).stores({
-      audios: '++id, blob, title, length, iconUrl, imgUrl',
+      audios: '++id, blob, title, length, iconUrl, imgUrl, date',
     });
   }
 }

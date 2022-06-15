@@ -4,9 +4,7 @@ export interface PlayerT {
     playing: boolean,
     playingUrl: string,
     second: number,
-    audioTitle: string,
-    img_url: string,
-    summary: string,
+    item?: IAudioItem,
 }
 
 export interface Player extends PlayerT {

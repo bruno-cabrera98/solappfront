@@ -1,5 +1,5 @@
-import { ApiProgramaItem } from './IProgram';
-import { ApiSeccion } from './ISection';
+import {ApiProgramaItem} from './IProgram';
+import {ApiSeccion} from './ISection';
 
 export interface IAudioItem {
     id: number,
@@ -7,30 +7,8 @@ export interface IAudioItem {
     date: string,
     length: string,
     title: string,
+    summary: string,
     imgUrl: string,
-}
-
-export class AudioItem implements IAudioItem {
-  public id: number;
-
-  public iconUrl: string;
-
-  public date: string;
-
-  public length: string;
-
-  public title: string;
-
-  public imgUrl: string;
-
-  constructor(apiContenido: ApiContenido) {
-    this.id = parseInt(apiContenido.id, 10);
-    this.iconUrl = apiContenido.programa.icon;
-    this.date = apiContenido.fechaEmision_dmy;
-    this.length = apiContenido.duracion_mp3;
-    this.title = apiContenido.titulo;
-    this.imgUrl = apiContenido.media.img_894x503;
-  }
 }
 
 export type DownloadState = 'downloading' | 'downloaded' | 'notDownloaded'
@@ -70,4 +48,17 @@ export interface ApiContenido {
     duracion_mp3: string,
     source_video: string,
     url_name: string,
+}
+
+
+export function apiContenidoToAudioItem(apiContenido: ApiContenido) : IAudioItem {
+    return {
+        id: parseInt(apiContenido.id, 10),
+        iconUrl: apiContenido.programa.icon,
+        date: apiContenido.fechaEmision_dmy,
+        length: apiContenido.duracion_mp3,
+        title: apiContenido.titulo,
+        imgUrl: apiContenido.media.img_894x503,
+        summary: apiContenido.resumen,
+    }
 }
