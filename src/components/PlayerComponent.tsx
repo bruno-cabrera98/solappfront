@@ -1,5 +1,4 @@
-import React, {SyntheticEvent, useEffect, useRef} from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {

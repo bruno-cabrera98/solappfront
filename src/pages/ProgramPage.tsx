@@ -2,7 +2,8 @@ import { useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import api from '../service/api';
-import { selectSections, setSectionAction } from '../reducers/programsReducer';
+import { selectProgramIds } from '../reducers/programsReducer';
+import { selectSections, setSectionsAction } from '../reducers/programSectionReducer'
 import ProgramSection from '../components/ProgramSection';
 import { H1 } from '../components/stateless/Atoms/Fonts';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
@@ -53,6 +54,7 @@ function ProgramPage() {
   const [program, setProgram] = useState<undefined | IProgram>(undefined);
 
   const sections = useAppSelector(selectSections(id));
+  const programs = useAppSelector(selectProgramIds());
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -60,7 +62,7 @@ function ProgramPage() {
       api.getProgram(id)
         .then((programItem) => {
           setProgram(programItem);
-          dispatch(setSectionAction(id, programItem.sections));
+          dispatch(setSectionsAction(programItem.sections));
         });
     }
   }, [id]);

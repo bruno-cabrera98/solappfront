@@ -4,12 +4,14 @@ import playerReducer from './reducers/playerReducer';
 import downloadListReducer from './reducers/downloadListReducer';
 // @ts-ignore
 import programsReducer from './reducers/programsReducer';
+import programSectionReducer from './reducers/programSectionReducer';
 
 const store = configureStore({
   reducer: {
     player: playerReducer,
     downloadList: downloadListReducer,
     programs: programsReducer,
+    sections: programSectionReducer,
   },
 });
 

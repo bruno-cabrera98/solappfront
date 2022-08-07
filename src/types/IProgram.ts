@@ -23,7 +23,7 @@ export function ApiProgramaItemToProgram(apiProgramaItem: ApiProgramaItem) : IPr
 
 export function ProgramFromApiProgram(apiProgram: ApiPrograma) {
   const program: IProgram = ApiProgramaItemToProgram(apiProgram.record);
-  program.sections = apiProgram.secciones.map((sec) => apiSectionToSection(sec));
+  program.sections = apiProgram.secciones.map((sec) => apiSectionToSection(sec, program.id));
   return program;
 }
 
