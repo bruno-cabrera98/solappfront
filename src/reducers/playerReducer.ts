@@ -19,6 +19,7 @@ const initialState: PlayerT = {
   playing: false,
   playingUrl: '',
   second: 0,
+  duration: 0,
   item: undefined,
 };
 
@@ -49,12 +50,17 @@ const playerSlice = createSlice({
       state.second = action.payload;
       return state;
     },
+    setDuration(state, action) {
+      state.duration = action.payload;
+      return state;
+    },
     initialize(state, action: PayloadAction<audioPlayingLocalStorage>) {
       const player = action.payload
       return {
         playing: player.playing,
         playingUrl: player.url,
         second: player.second,
+        duration: player.duration,
         item: player.item,
       }
     },
@@ -62,13 +68,14 @@ const playerSlice = createSlice({
 });
 
 const {
-  setAudio, stop, resume, pause, update, initialize,
+  setAudio, stop, resume, pause, update, initialize, setDuration,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;
 
 interface audioPlayingLocalStorage {
   second: number,
+  duration: number,
   type: 'url' | 'downloaded',
   url: string,
   playing: boolean,
@@ -86,10 +93,14 @@ export const setAudioAction = (
 
   dispatch(setAudio({ url, play, item }));
 
+  // Transform item.lenght : mm:ss to seconds
+  const duration = item.length.split(':').reduce((acc, time) => (60 * acc) + +parseInt(time), 0);
+
   const audioPlaying: audioPlayingLocalStorage = {
     item,
     type: 'url',
     url,
+    duration,
     second: 0,
     playing: play,
   };
@@ -150,5 +161,20 @@ export const initializeAction = (): ThunkAction<void, RootState, unknown, AnyAct
     dispatch(initialize(audioPlaying));
   }
 };
+
+export const setDurationAction = ( duration: number ): ThunkAction<void, RootState, unknown, AnyAction> => async (
+    dispatch,
+) => {
+  dispatch(setDuration(duration));
+  const audioPlayingString = localStorage.getItem('audioPlaying');
+  if (audioPlayingString) {
+    let audioPlaying: audioPlayingLocalStorage = JSON.parse(audioPlayingString);
+    audioPlaying = {
+      ...audioPlaying,
+      duration,
+    };
+    localStorage.setItem('audioPlaying', JSON.stringify(audioPlaying));
+  }
+}
 
 export const selectPlayer = (state: RootState) => state.player;

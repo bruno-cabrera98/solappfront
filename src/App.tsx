@@ -1,6 +1,6 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { Route } from 'react-router';
-import { Navigate, Routes } from 'react-router-dom';
+import { Routes } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import PlayerComponent from './components/PlayerComponent';
 import DownloadedAudios from './pages/DownloadedAudios';
@@ -17,6 +17,7 @@ import { initializeDownloadListAction } from './reducers/downloadListReducer';
 import PlayerMenu from './components/PlayerMenu';
 import { useAppDispatch } from './hooks/redux';
 import AboutPage from "./pages/AboutPage";
+import HomePage from './pages/HomePage';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -33,45 +34,45 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    api.getProgramas().then(
-        (programs) => dispatch(initAction(programs)),
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        api.getProgramas().then(
+            (programs) => dispatch(initAction(programs)),
+        );
+
+        db.audios.toArray()
+            .then((audios : IAudio[]) => {
+                dispatch(initializeDownloadListAction(audios.map(
+                    (audio : IAudio) => ({
+                            id: audio.id,
+                            downloadState: 'downloaded',
+                        }
+                    ),
+                )));
+            });
+    }, [dispatch]);
+    console.log(process.env)
+    return (
+        <div className="App">
+            <GlobalStyle />
+            <ThemeProvider theme={theme}>
+                <Navbar />
+                <PageContainer>
+                    <SideMenu />
+                    <ContentWrapper>
+                        <Routes >
+                            <Route element={<HomePage/>} path={process.env.PUBLIC_URL + "/"} />
+                            <Route element={<ProgramPage />} path={process.env.PUBLIC_URL + "/programs/:id"} />
+                            <Route element={<DownloadedAudios />} path={process.env.PUBLIC_URL + "/downloads"} />
+                            <Route element={<AboutPage />} path={process.env.PUBLIC_URL + "/about"} />
+                        </Routes>
+                    </ContentWrapper>
+                </PageContainer>
+                <PlayerMenu />
+                <PlayerComponent />
+            </ThemeProvider>
+        </div>
     );
-
-    db.audios.toArray()
-        .then((audios : IAudio[]) => {
-          dispatch(initializeDownloadListAction(audios.map(
-              (audio : IAudio) => ({
-                    id: audio.id,
-                    downloadState: 'downloaded',
-                  }
-              ),
-          )));
-        });
-  }, []);
-
-  return (
-      <div className="App">
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          <Navbar />
-          <PageContainer>
-            <SideMenu />
-            <ContentWrapper>
-              <Routes>
-                <Route element={<Navigate to="/programs/dar" />} path="/" />
-                <Route element={<ProgramPage />} path="/programs/:id" />
-                <Route element={<DownloadedAudios />} path="downloads" />
-                <Route element={<AboutPage />} path="about" />
-              </Routes>
-            </ContentWrapper>
-          </PageContainer>
-          <PlayerMenu />
-          <PlayerComponent />
-        </ThemeProvider>
-      </div>
-  );
 }
 
 export default App;

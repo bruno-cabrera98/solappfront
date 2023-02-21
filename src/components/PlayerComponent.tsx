@@ -4,7 +4,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faDownload, faPause, faPlay, faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
-import { initializeAction, updateAction } from '../reducers/playerReducer';
+import {initializeAction, setDurationAction, updateAction} from '../reducers/playerReducer';
 import Slider from './stateless/Slider';
 import PlayerTitle from './stateless/PlayerTitle';
 import PlayButton from './stateless/PlayButton';
@@ -115,6 +115,13 @@ function PlayerComponent() {
     }
   }, [player.playing]);
 
+  useEffect(() => {
+    if (audioRef.current && audioRef.current.duration) {
+      dispatch(setDurationAction(audioRef.current.duration));
+    }
+
+  }, [audioRef.current?.duration])
+
   const handlePlay = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (player.playing) {
@@ -154,7 +161,7 @@ function PlayerComponent() {
               />
             </SliderWrapper>
 
-            <Timer time={player.second} duration={audioRef.current.duration} />
+            <Timer time={player.second} duration={player.duration} />
           </>
         )
         : false}

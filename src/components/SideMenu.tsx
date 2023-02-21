@@ -80,7 +80,7 @@ function MenuItem({
     handleClick?: () => void
 }) {
   return (
-    <Link to={`/programs/${program.id}`} style={{ textDecoration: 'none' }} onClick={handleClick}>
+    <Link to={process.env.PUBLIC_URL + `/programs/${program.id}`} style={{ textDecoration: 'none' }} onClick={handleClick}>
       <MenuItemWrapper mobile={mobile} active={active}>
         <ProgramIcon icon={program.icon_url} mini />
         {program.name}
@@ -126,7 +126,9 @@ function SideMenu() {
 
   useEffect(() => {
     api.getProgramas().then(
-      (programList) => dispatch(initAction(programList)),
+      (programList) => {
+        dispatch(initAction(programList))
+      }
     );
   }, []);
 

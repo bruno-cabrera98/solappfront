@@ -4,6 +4,7 @@ export interface PlayerT {
     playing: boolean,
     playingUrl: string,
     second: number,
+    duration: number,
     item?: IAudioItem,
 }
 

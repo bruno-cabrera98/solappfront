@@ -1,9 +1,10 @@
 import React from "react"
+import BoxCarousel from "../components/BoxCarousel"
 
 
 const HomePage = () => 
 {
-    return <div>Placeholder</div>
+    return <BoxCarousel/>
 } 
 
 

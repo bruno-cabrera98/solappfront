@@ -5,7 +5,7 @@ import { findIconDefinition, IconDefinition, library } from '@fortawesome/fontaw
 import {
   faAnglesDown, faAnglesUp, faForward, faBackward,
 } from '@fortawesome/free-solid-svg-icons';
-import { H3 } from './stateless/Atoms/Fonts';
+import {H3, H5} from './stateless/Atoms/Fonts';
 import usePlayer from '../hooks/usePlayer';
 import {device} from "../parameters/sizing";
 
@@ -16,7 +16,7 @@ const transformUrl = (url: string) => `https${url.slice(4)}`;
 const PlayerMenuInfoWrapper = styled.div<{ img_url?: string }>`
   background-size: 100%;
   background-repeat: no-repeat;
-  background-image: url(${(props) => (props.img_url ? transformUrl(props.img_url) : '')});
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.3) 45%, rgba(232, 214, 21, 0) 100%), url(${(props) => (props.img_url ? transformUrl(props.img_url) : '')});
   flex-grow: 1;
 `;
 
@@ -60,6 +60,11 @@ const PlayerMenuWrapper = styled.div<{ open: boolean }>`
 const PlayerMenuTitle = styled(H3)`
   color: ${(props) => props.theme.fontWhite};
   margin: 10px;
+`;
+
+const PlayerMenuSummary = styled(H5)`
+    color: ${(props) => props.theme.fontWhite};
+    margin: 10px;
 `;
 
 const ExpandButtonWrapper = styled.button`
@@ -136,7 +141,9 @@ function PlayerMenu() {
         <PlayerMenuTitle>
           {player.item?.title}
         </PlayerMenuTitle>
-        {player.item?.summary}
+        <PlayerMenuSummary>
+            {player.item?.summary}
+        </PlayerMenuSummary>
       </PlayerMenuInfoWrapper>
 
       <PlayerMenuActionsWrapper>

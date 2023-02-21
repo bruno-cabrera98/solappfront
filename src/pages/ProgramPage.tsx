@@ -54,9 +54,7 @@ function ProgramPage() {
   const [program, setProgram] = useState<undefined | IProgram>(undefined);
 
   const sections = useAppSelector(selectSections(id));
-  const programs = useAppSelector(selectProgramIds());
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     if (id) {
       api.getProgram(id)
