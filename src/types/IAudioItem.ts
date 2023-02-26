@@ -16,6 +16,7 @@ export type DownloadState = 'downloading' | 'downloaded' | 'notDownloaded'
 export interface DownloadAudioItem {
     id: number,
     downloadState: DownloadState,
+    percentage: number,
 }
 
 export interface ApiContenido {

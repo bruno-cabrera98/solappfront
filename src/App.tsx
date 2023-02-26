@@ -46,6 +46,7 @@ function App() {
                     (audio : IAudio) => ({
                             id: audio.id,
                             downloadState: 'downloaded',
+                            percentage: 100,
                         }
                     ),
                 )));

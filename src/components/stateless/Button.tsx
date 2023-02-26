@@ -24,16 +24,30 @@ const Button = styled.button<{ greyed?: boolean }>`
     box-shadow: 0 0 15px rgba(0,0,0,0.71);
   }
   ${(props) => (props.greyed ? css`
-    background: #7d4f32;
-
+    background: rgba(230, 97, 21, 0.56);
     cursor: auto;
 
     :hover {
       background-image: none;
-
     }
   ` : css``)}
 `;
+
+const DownloadButton = styled(Button)<{ percentage?: number }>`
+  position: relative;
+
+  ::after {
+    content: '';
+    display: inline-block;
+    width: ${({percentage}) => percentage ? percentage : 0}%;
+    height: 5px;
+    background: rgba(8, 1, 15, 0.23);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+`;
+
 
 const RoundButton = styled.button`
   font-family: "delsol",serif !important;
@@ -63,4 +77,4 @@ const RoundButton = styled.button`
   cursor: pointer;
 `;
 
-export { RoundButton, Button };
+export { RoundButton, Button, DownloadButton };

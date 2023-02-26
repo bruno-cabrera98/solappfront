@@ -25,7 +25,7 @@ const StyledSpinner = styled.span`
 `;
 
 const FaSpinnerIcon: IconDefinition = findIconDefinition({ prefix: 'fas', iconName: 'spinner' });
-function Spinner() {
+function Spinner({ percentage = 100 }: { percentage: number }) {
   return <StyledSpinner><FontAwesomeIcon icon={FaSpinnerIcon} /></StyledSpinner>;
 }
 

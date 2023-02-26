@@ -6,13 +6,13 @@ import {
 import styled, { keyframes, css } from 'styled-components';
 import React from 'react';
 import ProgramIcon from './stateless/ProgramIcon';
-import { Button } from './stateless/Button';
+import {Button, DownloadButton} from './stateless/Button';
 import { device } from '../parameters/sizing';
 import usePlayer from '../hooks/usePlayer';
 import { H1 } from './stateless/Atoms/Fonts';
 import Spinner from './stateless/Spinner';
 import { useAppSelector } from '../hooks/redux';
-import { selectDownloadedItem } from '../reducers/downloadListReducer';
+import {selectDownloadedItem, selectDownloadedItemPercentage} from '../reducers/downloadListReducer';
 import { IAudioItem } from '../types/IAudioItem';
 
 library.add(faDownload, faTrashCan, faPlay, faPause);
@@ -24,11 +24,23 @@ const DetailsContainer = styled.div`
   padding-right: 10px;
 `;
 
-const ItemWrapper = styled.div`
+const ItemWrapper = styled.div<{ percentage?: number }>`
   display: flex;
   justify-content: space-between;
   min-height: 60px;
   min-width: 0;
+  position: relative;
+  
+  ::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 4px;
+    background: ${(props) => props.percentage && css`linear-gradient(90deg, #E86215FF ${props.percentage}%, #28044FFF ${props.percentage}%)`};
+    left: 0;
+    bottom: 0;
+    z-index: 0;
+  }
 `;
 
 const TitleContainer = styled.div`
@@ -37,6 +49,8 @@ const TitleContainer = styled.div`
   margin-left: 5px;
   min-width: 0;
 `;
+
+
 
 const skeletonAnimation = keyframes`
   from {
@@ -170,10 +184,10 @@ function ButtonDelete(
   );
 }
 
-function ButtonSpinner() {
+function ButtonSpinner({ percentage }: { percentage: number }) {
   return (
     <Button greyed>
-      <Spinner />
+      <Spinner percentage={percentage} />
     </Button>
   );
 }
@@ -200,6 +214,7 @@ function AudioListItem({ item, skeleton }: { item?: IAudioItem, skeleton?: boole
   const icon = item && item.iconUrl;
 
   const downloadedState = useAppSelector(selectDownloadedItem(item && item.id));
+  const downloadedPercentage = useAppSelector(selectDownloadedItemPercentage(item && item.id));
 
   const player = usePlayer();
 
@@ -222,11 +237,11 @@ function AudioListItem({ item, skeleton }: { item?: IAudioItem, skeleton?: boole
       return <ButtonDownload handleDownload={handleDownload} />;
     } if (downloadedState === 'downloaded') {
       return <ButtonDelete handleDelete={handleDelete} />;
-    } return <ButtonSpinner />;
+    } return <ButtonSpinner percentage={downloadedPercentage} />;
   };
 
   return (
-    <ItemWrapper>
+    <ItemWrapper percentage={downloadedState === 'downloading' ? downloadedPercentage : 0}>
       <DetailsContainer>
         <ProgramIcon icon={icon} skeleton={skeleton} small />
         <TitleContainer>

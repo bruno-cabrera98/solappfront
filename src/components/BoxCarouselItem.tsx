@@ -5,7 +5,7 @@ import { IAudioItem } from "../types/IAudioItem";
 
 
 const BoxCarouselItemWrapper = styled.div`
-    min-width: 400px;
+    min-width: 40px;
     min-height: 300px;
     background: red;
     margin: 20px;

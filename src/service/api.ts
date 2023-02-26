@@ -20,8 +20,12 @@ const getAudioSection = async (
         },
     );
 
-const getAudio = async (id: number) => axios.get(`${url}audio/${id}`, {
+const getAudio = async (id: number, onPercentageChange : (percentage : number) => void) => axios.get(`${url}audio/${id}`, {
     responseType: 'blob',
+    onDownloadProgress: (progressEvent) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        onPercentageChange(percentCompleted);
+    }
 });
 
 const getProgramas = async (): Promise<IProgram[]> => axios.get(`${url}programas`).then(

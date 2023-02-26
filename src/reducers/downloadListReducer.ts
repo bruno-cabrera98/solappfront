@@ -22,10 +22,13 @@ const downloadListSlice = createSlice({
       return state.filter((item) => item.id !== id);
     },
     changeStateAudio(state, action: PayloadAction<DownloadAudioItem>) {
-      const { id, downloadState } = action.payload;
+      const { id, downloadState, percentage } = action.payload;
       const audio = state.find((audioItem) => audioItem.id === id);
-      if (audio) audio.downloadState = downloadState;
-    },
+      if (audio) {
+        audio.downloadState = downloadState;
+        audio.percentage = percentage;
+      }
+    }
   },
 });
 
@@ -36,32 +39,34 @@ const {
 export default downloadListSlice.reducer;
 
 export const initializeDownloadListAction = (
-  audioList: DownloadAudioItem[],
+    audioList: DownloadAudioItem[],
 ): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
   dispatch(initialize(audioList));
 };
 
 export const addDownloadAudioAction = (
-  audio: DownloadAudioItem,
+    audio: DownloadAudioItem,
 ): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
   dispatch(addDownloadAudio(audio));
 };
 
 export const removeDownloadAudioAction = (
-  id: number,
+    id: number,
 ): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
   dispatch(removeDownloadAudio(id));
 };
 
 export const changeStateAudioAction = (
-  id: number,
-  downloadState: DownloadState,
+    id: number,
+    downloadState: DownloadState,
+    percentage = 100,
 ): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
-  dispatch(changeStateAudio({ id, downloadState }));
+  dispatch(changeStateAudio({ id, downloadState, percentage }));
 };
 
+
 export const selectDownloadedItem = (
-  id: number | undefined,
+    id: number | undefined,
 ) => (state: RootState): DownloadState => {
   if (id) {
     const audio = state.downloadList.find((audioItem) => audioItem.id === id);
@@ -69,6 +74,16 @@ export const selectDownloadedItem = (
   }
   return 'notDownloaded';
 };
+
+export const selectDownloadedItemPercentage = (
+    id: number | undefined,
+) => (state: RootState): number => {
+    if (id) {
+        const audio = state.downloadList.find((audioItem) => audioItem.id === id);
+        if (audio) return audio.percentage;
+    }
+    return 0;
+}
 
 export const selectDownloadedItemList = () => (state: RootState): DownloadAudioItem[] => {
   return state.downloadList

@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import {
   pauseAction, resumeAction, selectPlayer, setAudioAction,
 } from '../reducers/playerReducer';
@@ -31,11 +30,11 @@ const usePlayer = (): Player => {
       const { id } = item;
       let audioBlob = await db.audios.get(id);
       if (!audioBlob) {
-        dispatch(addDownloadAudioAction({ ...item, downloadState: 'downloading' }));
-        const res = await service.getAudio(id);
+        dispatch(addDownloadAudioAction({ ...item, downloadState: 'downloading', percentage: 0 }));
+        const res = await service.getAudio(id, (percentage) => dispatch(changeStateAudioAction(id, 'downloading', percentage)));
         audioBlob = res.data;
         if (audioBlob) {
-          dispatch(changeStateAudioAction(item.id, 'downloaded'));
+          dispatch(changeStateAudioAction(item.id, 'downloaded', 100));
           db.audios.add({
             id,
             blob: audioBlob,
